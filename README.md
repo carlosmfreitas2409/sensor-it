@@ -9,8 +9,6 @@
   <a href="#introduction"><strong>Introduction</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
   <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
-  <a href="#self-hosting"><strong>Self-hosting</strong></a> ·
-  <a href="#contributing"><strong>Contributing</strong></a>
 </p>
 
 ## Introduction
@@ -26,7 +24,7 @@ SensorIt is a SaaS platform enabling intelligent monitoring and analysis of indu
 - Team Collaboration
 - Pre-defined kits (IoT)
 
-## Tech Stack/Architecture
+## Tech Stack
 
 - [Bun](https://bun.sh/)
 - [TypeScript](https://www.typescriptlang.org/)
