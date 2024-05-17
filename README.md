@@ -5,11 +5,16 @@
 <p align="center">
   Monitor and analyze your machines smarter
   <br />
-  <br />
   <a href="#introduction"><strong>Introduction</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
-  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#tech-stack"><strong>Tech Stack</strong></a>
 </p>
+
+<div align="center">
+  [![GitHub Repo stars](https://img.shields.io/github/stars/carlosmfreitas2409/sensor-it)](https://github.com/carlosmfreitas2409/sensor-it)
+  [![License: AGPL-3.0](https://img.shields.io/github/license/carlosmfreitas2409/sensor-it)](https://github.com/carlosmfreitas2409/sensor-it/blob/main/LICENSE)
+  [![Figma](https://img.shields.io/badge/Figma-F24E1E?logo=figma&logoColor=white)](https://www.figma.com/design/qwIig2OYafGCfzl3TAXUJ6/SensorIt)
+</div>
 
 ## Introduction
 
