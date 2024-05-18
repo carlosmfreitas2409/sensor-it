@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
+		"dev:www": "turbo dev --filter=@sensor-it/www",
 		"lint": "turbo lint && manypkg check",
 		"format": "biome format --write .",
 		"typecheck": "turbo typecheck"
