@@ -5,7 +5,8 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "single"
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "double"
 		}
 	},
 	"linter": {
@@ -14,6 +15,9 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedImports": "warn"
+			},
+			"nursery": {
+				"useSortedClasses": "error"
 			}
 		}
 	}
