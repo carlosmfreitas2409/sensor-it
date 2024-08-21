@@ -5,10 +5,12 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  checks:
     name: Build
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changedAction.outputs.changed }}
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -18,10 +20,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Bun 
-        uses: oven-sh/setup-bun@v2
-      - name: Install dependencies
-        run: bun install
+      # - name: Setup Bun 
+      #   uses: oven-sh/setup-bun@v2
+      # - name: Install dependencies
+      #   run: bun install
         # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
       - name: Check for changes
         id: changedAction
@@ -29,6 +31,14 @@ jobs:
         with:
           workspace: "@sensor-it/api"
           from: $TURBO_FALLBACK
-      - if: steps.changedAction.outputs.changed == 'false'
-        run: exit 0
-      - run: echo "All good!"
+  deploy:
+    needs: checks
+    if: needs.checks.outputs.changed == 'true'
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: echo "Deploying..."
