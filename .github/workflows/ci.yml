@@ -22,6 +22,13 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: Install dependencies
         run: bun install
+        # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
       - name: Check for changes
-        run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
+        id: changedAction
+        uses: Trampoline-CX/action-turbo-changed@v1
+        with:
+          workspace: "@sensor-it"api"
+          from: $TURBO_FALLBACK
+      - if: steps.changedAction.outputs.changed == 'false'
+        run: exit 0
       - run: echo "All good!"
