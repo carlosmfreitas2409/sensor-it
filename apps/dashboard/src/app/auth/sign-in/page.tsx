@@ -22,7 +22,7 @@ import {
 
 export type SignInFormData = z.infer<typeof signInSchema>;
 
-export const signInSchema = z.object({
+const signInSchema = z.object({
 	email: z.string().email('Por favor, insira um e-mail válido.'),
 	password: z.string().min(1, 'Por favor, insira sua senha.'),
 	remember: z.boolean().optional(),
