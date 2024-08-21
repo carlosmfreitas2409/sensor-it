@@ -27,7 +27,7 @@ jobs:
         id: changedAction
         uses: Trampoline-CX/action-turbo-changed@v1
         with:
-          workspace: "@sensor-it"api"
+          workspace: "@sensor-it/api"
           from: $TURBO_FALLBACK
       - if: steps.changedAction.outputs.changed == 'false'
         run: exit 0
