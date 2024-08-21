@@ -28,8 +28,6 @@ export default function RootLayout({
 					{children}
 
 					<Toaster richColors position="top-right" />
-
-					<span>temp text</span>
 				</Providers>
 			</body>
 		</html>
