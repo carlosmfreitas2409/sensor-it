@@ -1,8 +1,8 @@
 {
-  "name": "@sensor-it/tsconfig",
-  "version": "0.0.0",
-  "private": true,
-  "files": [
-    "base.json"
-  ]
+	"name": "@sensor-it/tsconfig",
+	"version": "0.0.0",
+	"private": true,
+	"files": [
+		"base.json"
+	]
 }

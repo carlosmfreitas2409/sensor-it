@@ -1,0 +1,18 @@
+{
+	"extends": "@sensor-it/tsconfig/nextjs.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"../../packages/utils/src/utils/is-valid-json.ts"
+	],
+	"exclude": ["node_modules"]
+}

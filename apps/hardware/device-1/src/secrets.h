@@ -1,0 +1,3 @@
+#define DEVICE_MODEL "TriS"
+#define DEVICE_NAME "SIT_" DEVICE_MODEL 
+

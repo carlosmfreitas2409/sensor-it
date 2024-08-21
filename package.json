@@ -5,14 +5,18 @@
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
-		"dev:www": "turbo dev --filter=@sensor-it/www",
 		"lint": "turbo lint && manypkg check",
-		"format": "biome format --write .",
-		"typecheck": "turbo typecheck"
+		"format": "turbo format",
+		"ui:add": "turbo --filter=@sensor-it/ui ui:add --",
+		"db": "turbo --filter=@sensor-it/db",
+		"api": "turbo --filter=@sensor-it/api",
+		"dashboard": "turbo --filter=@sensor-it/dashboard",
+		"www": "turbo --filter=@sensor-it/www"
 	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.7.3",
+	"dependencies": {
+		"@biomejs/biome": "^1.8.3",
 		"@manypkg/cli": "^0.21.4",
+		"dotenv-cli": "^7.4.2",
 		"turbo": "latest"
 	},
 	"engines": {

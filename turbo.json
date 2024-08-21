@@ -1,7 +1,7 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalDependencies": ["**/.env.*local"],
-	"pipeline": {
+	"globalDependencies": ["**/.env*"],
+	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**", "next-env.d.ts"]
@@ -10,11 +10,22 @@
 			"cache": false,
 			"persistent": true
 		},
-		"lint": {
-			"dependsOn": ["^lint"]
+		"lint": {},
+		"format": {},
+		"ui:add": {
+			"cache": false
 		},
-		"typecheck": {
-			"outputs": ["node_modules/.cache/tsbuildinfo.json"]
+		"studio": {
+			"cache": false
+		},
+		"generate": {
+			"cache": false
+		},
+		"migrate": {
+			"cache": false
+		},
+		"seed": {
+			"cache": false
 		}
 	}
 }

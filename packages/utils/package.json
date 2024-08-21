@@ -1,0 +1,19 @@
+{
+	"name": "@sensor-it/utils",
+	"version": "0.0.0",
+	"private": true,
+	"sideEffects": false,
+	"exports": {
+		".": "./src/utils/index.ts",
+		"./constants": "./src/constants/index.ts"
+	},
+	"scripts": {
+		"lint": "biome lint ./src",
+		"format": "biome format --write ./src"
+	},
+	"devDependencies": {
+		"@sensor-it/tsconfig": "workspace:*",
+		"@types/bun": "^1.1.4",
+		"typescript": "^5.5.3"
+	}
+}
