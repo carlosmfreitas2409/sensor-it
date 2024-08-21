@@ -12,7 +12,7 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      TURBO_FALLBACK: ${{ github.event.pull_request.base.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
