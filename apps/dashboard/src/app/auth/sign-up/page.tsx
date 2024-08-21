@@ -26,7 +26,7 @@ import {
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 
-export const signUpSchema = z
+const signUpSchema = z
 	.object({
 		name: z.string().refine((value) => value.split(' ').length > 1, {
 			message: 'Por favor, insira seu nome completo.',
