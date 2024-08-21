@@ -23,5 +23,5 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Check for changes
-        run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_RUN_FILTER --task=build
+        run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
       - run: echo "All good!"
