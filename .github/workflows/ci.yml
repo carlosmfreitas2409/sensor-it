@@ -6,6 +6,7 @@ on:
 
 jobs:
   check:
+    name: Check app changed
     uses: ./.github/workflows/app-changed.yml
     with:
       app: "@sensor-it/api"
