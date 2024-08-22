@@ -6,27 +6,27 @@ on:
 
 jobs:
   check:
-    name: Build
+    name: Check
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}
     env:
+      APP: "@sensor-it/api"
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
       TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+    outputs:
+      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, env.APP) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Bun 
+      - name: Setup Bun
         uses: oven-sh/setup-bun@v2
-        # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
       - name: Check for changes
         id: changeset
         run: |
-          content=`bunx turbo run build --filter="@sensor-it/api...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
+          content=`bunx turbo run build --filter="${{ env.APP }}...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
           content="${content//$'\n'/}"
           content="${content//$'\r'/}"
           echo "result=$content" >> "$GITHUB_OUTPUT"
