@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: bun install
         # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
-      - run: bunx turbo run build --filter="@sensor-it/api...[$TURBO_FALLBACK]" --dry=json
+      - run: bunx turbo run build --filter="@sensor-it/api...[${{ env.TURBO_FALLBACK }}]" --dry=json
         id: changedAction
   deploy:
     needs: checks
