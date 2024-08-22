@@ -6,33 +6,12 @@ on:
 
 jobs:
   check:
-    name: Check
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    env:
-      APP: "@sensor-it/api"
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-    outputs:
-      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, env.APP) }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-      - name: Check for changes
-        id: changeset
-        run: |
-          content=`bunx turbo run build --filter="${{ env.APP }}...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
-          content="${content//$'\n'/}"
-          content="${content//$'\r'/}"
-          echo "result=$content" >> "$GITHUB_OUTPUT"
+    uses: ./.github/workflows/app-changed.yml
+    with:
+      app: "@sensor-it/api"
   deploy:
     needs: check
-    # if: needs.checks.outputs.changed == 'true'
+    if: needs.checks.outputs.changed == 'true'
     name: Deploy
     runs-on: ubuntu-latest
     steps:
@@ -40,4 +19,4 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: echo '${{ needs.check.outputs.changed }}'
+      - run: echo "Deploying..."
