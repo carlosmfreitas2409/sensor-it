@@ -1,0 +1,33 @@
+name: Check app changed
+
+on: 
+  workflow_call:
+    inputs:
+      app:
+        required: true
+        type: string
+    outputs:
+      changed:
+        value: ${{ jobs.check.outputs.changed }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+    outputs:
+      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, inputs.app) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Check for changes
+        id: changeset
+        run: |
+          content=`bunx turbo run build --filter="${{ inputs.app }}...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
+          content="${content//$'\n'/}"
+          content="${content//$'\r'/}"
+          echo "result=$content" >> "$GITHUB_OUTPUT"
