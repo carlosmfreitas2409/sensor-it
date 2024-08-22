@@ -29,9 +29,10 @@ jobs:
           content=`bunx turbo run build --filter="@sensor-it/api...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
           content="${content//$'\n'/}"
           content="${content//$'\r'/}"
+          content="${{ contains(fromJSON('$content').packages, '@sensor-it/api') }}"
           echo "result=$content" >> "$GITHUB_OUTPUT"
       - run: echo '${{ steps.changeset.outputs.result }}'
-      - run: echo '${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}'
+      # - run: echo '${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}'
   deploy:
     needs: check
     # if: needs.checks.outputs.changed == 'true'
