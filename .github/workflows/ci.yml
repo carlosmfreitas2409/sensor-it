@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     outputs:
-      changed: ${{ steps.changedAction.outputs.changed }}
+      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -22,14 +22,18 @@ jobs:
           fetch-depth: 0
       - name: Setup Bun 
         uses: oven-sh/setup-bun@v2
-      - name: Install dependencies
-        run: bun install
         # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
-      - run: bunx turbo run build --filter="@sensor-it/api...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json
-        id: changedAction
+      - name: Check for changes
+        id: changeset
+        run: |
+          content=`bunx turbo run build --filter="@sensor-it/api...[${{ env.TURBO_FALLBACK }}...HEAD]" --dry=json`
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=result::$content"
   deploy:
     needs: checks
-    if: needs.checks.outputs.changed == 'true'
+    # if: needs.checks.outputs.changed == 'true'
     name: Deploy
     runs-on: ubuntu-latest
     steps:
@@ -37,4 +41,4 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: echo "Deploying..."
+      - run: echo '${{ steps.checks.outputs.changed }}'
