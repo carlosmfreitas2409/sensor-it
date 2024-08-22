@@ -31,6 +31,8 @@ jobs:
         with:
           workspace: "@sensor-it/api"
           from: ${{ env.TURBO_FALLBACK }}
+      - run: echo "Changed: ${{ steps.changedAction.outputs.changed }}" \
+        && echo "Affected: ${{ steps.changedAction.outputs.affectedWorkspaces }}"
   deploy:
     needs: checks
     if: needs.checks.outputs.changed == 'true'
