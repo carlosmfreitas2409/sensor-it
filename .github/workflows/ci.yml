@@ -9,8 +9,8 @@ jobs:
     name: Build
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}
+    # outputs:
+    #   changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -31,7 +31,8 @@ jobs:
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           echo "result=$content" >> "$GITHUB_OUTPUT"
-
+      - run: echo '${{ steps.changeset.outputs.result }}'
+      - run: echo '${{ contains(fromJSON(steps.changeset.outputs.result).packages, '@sensor-it/api') }}'
   deploy:
     needs: check
     # if: needs.checks.outputs.changed == 'true'
