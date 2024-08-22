@@ -25,16 +25,8 @@ jobs:
       - name: Install dependencies
         run: bun install
         # run: bunx turbo-ignore @sensor-it/api --fallback=$TURBO_FALLBACK --task=build
-      - name: Check for changes
+      - run: bunx turbo run @sensor-it/api --fallback=$TURBO_FALLBACK --task=build --dry=json
         id: changedAction
-        uses: Trampoline-CX/action-turbo-changed@v1
-        with:
-          workspace: "@sensor-it/api"
-          from: ${{ env.TURBO_FALLBACK }}
-      - run: |
-        echo "${{ steps.changedAction.outputs.changed }}"
-      - run: |
-        echo "${{ steps.changedAction.outputs.affectedWorkspaces }}"
   deploy:
     needs: checks
     if: needs.checks.outputs.changed == 'true'
