@@ -7,7 +7,7 @@ import { env } from '@sensor-it/env/server';
 
 const connection = postgres(env.DATABASE_URL, {
 	max: 1,
-	ssl: env.DATABASE_SSL,
+	ssl: env.DATABASE_SSL ? 'require' : false,
 });
 
 const db = drizzle(connection);

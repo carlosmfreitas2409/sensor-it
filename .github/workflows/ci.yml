@@ -39,9 +39,9 @@ jobs:
           project-slug: "sensor-it-ch6j"
           export-type: "file"
       - name: Run migration
-        run: bun db migrate
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
+        run: bun db migrate
       - name: Copy executable to AWS
         uses: appleboy/scp-action@v0.1.7
         with:

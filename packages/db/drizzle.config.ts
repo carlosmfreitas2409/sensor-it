@@ -8,6 +8,6 @@ export default defineConfig({
 	dialect: 'postgresql',
 	dbCredentials: {
 		url: env.DATABASE_URL,
-		ssl: env.DATABASE_SSL,
+		ssl: env.DATABASE_SSL ? 'require' : false,
 	},
 });
