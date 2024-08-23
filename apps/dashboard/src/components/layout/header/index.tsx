@@ -17,7 +17,7 @@ export async function Header() {
 					<span className="font-medium text-sm">{user.name}</span>
 				</div>
 
-				<Input className="max-w-sm" placeholder="Pesquisar" />
+				<Input type="search" className="max-w-sm" placeholder="Pesquisar" />
 
 				<div className="flex items-center gap-4">
 					<Button variant="ghost" size="icon">

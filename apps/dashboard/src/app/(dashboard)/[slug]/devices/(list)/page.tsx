@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { getOrganizationSlug } from '@/lib/auth';
 
+import { listDevices } from '@/services/devices/list-devices';
+
 import { LayoutGrid, LayoutList, Plus } from '@sensor-it/ui/icons';
 
 import {
@@ -17,7 +19,6 @@ import {
 import { DeviceCard } from './components/device-card';
 
 import { columns } from './columns';
-import { listDevices } from '@/services/devices/list-devices';
 
 export default async function Devices() {
 	const slug = getOrganizationSlug();
