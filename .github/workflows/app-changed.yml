@@ -12,10 +12,9 @@ on:
 
 jobs:
   check:
-    if: ${{ github.event_name != 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     env:
-      TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      TURBO_FALLBACK: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before || 'HEAD' }}
     outputs:
       changed: ${{ contains(fromJSON(steps.changeset.outputs.result).packages, inputs.app) }}
     steps:
