@@ -49,4 +49,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "apps/api/dist/,.env"
           target: "app/api"
-          strip_components: 3
+          # strip_components: 3
