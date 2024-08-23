@@ -7,7 +7,7 @@
 		"lint": "biome lint ./src",
 		"format": "biome format --write ./src",
 		"env:load": "dotenv -e ../../.env --",
-		"build": "bun build src/infra/http/server.ts --target bun --compile --outfile dist/app"
+		"build": "bun build --compile --minify --sourcemap src/infra/http/server.ts --outfile dist/app"
 	},
 	"dependencies": {
 		"@elysiajs/cors": "^1.0.4",
