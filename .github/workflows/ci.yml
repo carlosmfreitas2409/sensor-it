@@ -38,8 +38,10 @@ jobs:
           env-slug: "prod"
           project-slug: "sensor-it-ch6j"
           export-type: "file"
-      # - name: Run migration
-      #   run: bun db migrate
+      - name: Run migration
+        run: bun db migrate
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
       - name: Copy executable to AWS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -49,4 +51,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "apps/api/dist/,.env"
           target: "app/api"
-          # strip_components: 3
+          strip_components: 3
