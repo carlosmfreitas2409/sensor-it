@@ -12,6 +12,10 @@ export const env = createEnv({
 		GOOGLE_OAUTH_CLIENT_SECRET: z.string().min(1),
 		GOOGLE_OAUTH_REDIRECT_URI: z.string().url(),
 	},
-	runtimeEnv: process.env,
+	runtimeEnv: {
+		...process.env,
+		GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+		GOOGLE_OAUTH_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+	},
 	emptyStringAsUndefined: true,
 });
