@@ -3,16 +3,18 @@ name: CI
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   check:
     name: Check app changed
+    if: github.event_name != 'workflow_dispatch'
     uses: ./.github/workflows/app-changed.yml
     with:
       app: "@sensor-it/api"
   deploy:
     needs: check
-    if: needs.check.outputs.changed == 'true'
+    if: ${{ needs.check.outputs.changed == 'true' || github.event_name == 'workflow_dispatch' }}
     name: Deploy
     runs-on: ubuntu-latest
     env:
@@ -29,6 +31,16 @@ jobs:
         run: bun install
       - name: Build
         run: bun api build
+      - name: Export secrets to env file
+        uses: Infisical/secrets-action@v1.0.7
+        with:
+          client-id: ${{ secrets.MACHINE_IDENTITY_CLIENT_ID }}
+          client-secret: ${{ secrets.MACHINE_IDENTITY_CLIENT_SECRET }}
+          env-slug: "prod"
+          project-slug: "sensor-it-ch6j"
+          export-type: "file"
+      - name: Run migration
+        run: bun db migrate
       - name: Copy executable to AWS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -36,6 +48,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "apps/api/dist/"
+          source: "apps/api/dist/,.env"
           target: "app/api"
           strip_components: 3
