@@ -12,7 +12,7 @@ jobs:
       app: "@sensor-it/api"
   deploy:
     needs: check
-    if: needs.checks.outputs.changed == 'true'
+    if: needs.check.outputs.changed == 'true'
     name: Deploy
     runs-on: ubuntu-latest
     env:
