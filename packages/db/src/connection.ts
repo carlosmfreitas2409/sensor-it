@@ -7,7 +7,7 @@ import { env } from '@sensor-it/env/server';
 import * as schema from './schema';
 
 function createConnection(config?: DrizzleConfig) {
-	const client = postgres(env.DATABASE_URL);
+	const client = postgres(env.DATABASE_URL, { ssl: env.DATABASE_SSL });
 
 	return drizzle(client, { ...config, schema });
 }
