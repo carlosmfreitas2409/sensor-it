@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from './lib/auth';
 
 const AUTH_PATHNAME = '/auth';
+const PUBLIC_PATHNAMES = ['/organizations', '/settings', '/support'];
 
 export function middleware(request: NextRequest) {
 	const { pathname, origin } = request.nextUrl;
@@ -19,11 +20,11 @@ export function middleware(request: NextRequest) {
 	) {
 		const lastUsedOrganization = request.cookies.get('organization')?.value;
 
-		if (lastUsedOrganization) {
-			return NextResponse.redirect(new URL(lastUsedOrganization, origin));
+		if (!lastUsedOrganization) {
+			return NextResponse.redirect(new URL('/organizations', origin));
 		}
 
-		return NextResponse.redirect(new URL('/organizations', origin));
+		return NextResponse.redirect(new URL(lastUsedOrganization, origin));
 	}
 
 	const response = NextResponse.next();
@@ -32,7 +33,7 @@ export function middleware(request: NextRequest) {
 
 	if (
 		!pathname.startsWith(AUTH_PATHNAME) &&
-		pathname !== '/organizations' &&
+		!PUBLIC_PATHNAMES.includes(pathname) &&
 		slug
 	) {
 		response.cookies.set('organization', slug, {
