@@ -29,12 +29,12 @@ jobs:
         run: bun install
       - name: Build
         run: bun api build
-      - name: copy file via ssh password
+      - name: Copy executable to AWS
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "apps/api/dist"
+          source: "apps/api/dist/*"
           target: "app/api"
