@@ -6,8 +6,7 @@ export const env = createEnv({
 		GOOGLE_OAUTH_CLIENT_ID: z.string(),
 		GOOGLE_OAUTH_REDIRECT_URI: z.string().url(),
 	},
-	client: {},
-	shared: {
+	client: {
 		NEXT_PUBLIC_API_URL: z.string().url(),
 	},
 	runtimeEnv: {
@@ -16,4 +15,5 @@ export const env = createEnv({
 		NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
 	},
 	emptyStringAsUndefined: true,
+	skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });
