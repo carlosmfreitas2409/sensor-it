@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "bun env:load next dev",
-		"build": "bun env:load next build",
+		"build": "next build",
 		"start": "next start",
 		"lint": "biome lint ./src",
 		"format": "biome format --write ./src",
