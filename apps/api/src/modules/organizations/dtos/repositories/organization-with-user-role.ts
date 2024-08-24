@@ -6,4 +6,5 @@ export type OrganizationWithUserRole = {
 	slug: string;
 	avatarUrl: string | null;
 	role: (typeof roleSchema.options)[number];
+	devices: number;
 };

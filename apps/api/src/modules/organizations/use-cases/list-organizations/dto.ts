@@ -11,6 +11,7 @@ const successResponse = t.Array(
 		slug: t.String(),
 		avatarUrl: t.Nullable(t.String({ format: 'uri' })),
 		role: t.Enum(roleSchema.Enum),
+		devices: t.Number(),
 	}),
 );
 

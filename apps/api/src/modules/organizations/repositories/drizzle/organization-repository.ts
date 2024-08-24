@@ -1,5 +1,10 @@
-import { eq } from 'drizzle-orm';
-import { members, organizations, type Organization } from '@sensor-it/db';
+import { count, eq } from 'drizzle-orm';
+import {
+	devices,
+	members,
+	organizations,
+	type Organization,
+} from '@sensor-it/db';
 
 import { db } from '@/infra/lib/drizzle';
 
@@ -19,10 +24,13 @@ export class DrizzleOrganizationRepository implements IOrganizationRepository {
 				slug: organizations.slug,
 				avatarUrl: organizations.avatarUrl,
 				role: members.role,
+				devices: count(devices.id),
 			})
 			.from(organizations)
 			.where(eq(members.userId, userId))
-			.innerJoin(members, eq(organizations.id, members.organizationId));
+			.innerJoin(members, eq(organizations.id, members.organizationId))
+			.innerJoin(devices, eq(organizations.id, devices.organizationId))
+			.groupBy(organizations.id, members.role);
 
 		return organizationsWithUserRole;
 	}
