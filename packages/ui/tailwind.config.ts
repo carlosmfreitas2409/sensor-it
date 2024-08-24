@@ -3,13 +3,6 @@ import type { Config } from 'tailwindcss';
 const config: Omit<Config, 'content'> = {
 	content: ['./src/**/*.{ts,tsx}'],
 	theme: {
-		container: {
-			center: true,
-			padding: '2rem',
-			screens: {
-				'2xl': '1280px',
-			},
-		},
 		extend: {
 			colors: {
 				shadow: 'hsl(var(--shadow))',
