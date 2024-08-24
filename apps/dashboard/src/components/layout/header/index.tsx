@@ -11,13 +11,18 @@ export async function Header() {
 
 	return (
 		<header className="w-full border-b py-3">
-			<div className="flex h-full w-full items-center justify-between px-8">
+			<div className="container flex h-full max-w-full items-center justify-between">
 				<div className="flex flex-col">
 					<span className="text-xs">Bem-vindo(a),</span>
 					<span className="font-medium text-sm">{user.name}</span>
 				</div>
 
-				<Input type="search" className="max-w-sm" placeholder="Pesquisar" />
+				<Input
+					type="search"
+					className="hidden max-w-sm md:flex"
+					placeholder="Pesquisar"
+					autoComplete="off"
+				/>
 
 				<div className="flex items-center gap-4">
 					<Button variant="ghost" size="icon">
