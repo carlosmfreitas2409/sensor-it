@@ -11,7 +11,7 @@ export default function AppLayout({
 			<div className="ml-72 flex flex-1 flex-col">
 				<Header />
 
-				<main className="flex flex-1 p-8">{children}</main>
+				<main className="container flex flex-1 py-8">{children}</main>
 			</div>
 		</div>
 	);
