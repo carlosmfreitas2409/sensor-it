@@ -29,7 +29,7 @@ export class DrizzleOrganizationRepository implements IOrganizationRepository {
 			.from(organizations)
 			.where(eq(members.userId, userId))
 			.innerJoin(members, eq(organizations.id, members.organizationId))
-			.innerJoin(devices, eq(organizations.id, devices.organizationId))
+			.leftJoin(devices, eq(organizations.id, devices.organizationId))
 			.groupBy(organizations.id, members.role);
 
 		return organizationsWithUserRole;
