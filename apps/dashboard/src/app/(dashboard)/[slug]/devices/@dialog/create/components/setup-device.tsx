@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { DICEBEAR_AVATAR_URL } from '@sensor-it/utils/constants';
-
 import { listMembers } from '@/services/members/list-members';
 import { useOrganization } from '@/hooks/use-organization';
 
@@ -14,10 +12,10 @@ import {
 	FormInput,
 	FormSelect,
 	SelectItem,
-	Avatar,
-	AvatarImage,
 	FormSubmit,
 } from '@sensor-it/ui/components';
+
+import { AvatarWithFallback } from '@/components/avatar-fallback';
 
 export function SetupDeviceStep() {
 	const slug = useOrganization();
@@ -53,14 +51,11 @@ export function SetupDeviceStep() {
 						{members?.map((member) => (
 							<SelectItem key={member.userId} value={member.userId}>
 								<div className="flex flex-row items-center gap-2">
-									<Avatar className="size-4">
-										<AvatarImage
-											src={
-												member.avatarUrl ||
-												`${DICEBEAR_AVATAR_URL}${member.name}`
-											}
-										/>
-									</Avatar>
+									<AvatarWithFallback
+										className="size-4"
+										src={member.avatarUrl}
+										alt={member.name}
+									/>
 									<span>{member.name}</span>
 								</div>
 							</SelectItem>

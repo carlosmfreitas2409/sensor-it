@@ -1,18 +1,12 @@
 import Link from 'next/link';
 
-import { DICEBEAR_AVATAR_URL } from '@sensor-it/utils/constants';
-
 import { listOrganizations } from '@/services/organizations/list-organizations';
 
-import { Cpu, Factory } from '@sensor-it/ui/icons';
+import { Cpu } from '@sensor-it/ui/icons';
 
-import {
-	Avatar,
-	AvatarImage,
-	Badge,
-	Button,
-	Card,
-} from '@sensor-it/ui/components';
+import { Badge, Button, Card } from '@sensor-it/ui/components';
+
+import { AvatarWithFallback } from '@/components/avatar-fallback';
 
 export default async function Organizations() {
 	const organizations = await listOrganizations();
@@ -20,7 +14,7 @@ export default async function Organizations() {
 	return (
 		<div>
 			<div className="flex h-36 border-b">
-				<div className="container flex flex-1 items-center justify-between">
+				<div className="container flex flex-1 items-center justify-between gap-4">
 					<h1 className="truncate font-medium text-2xl">Minhas organizações</h1>
 					<Button variant="secondary">Criar organização</Button>
 				</div>
@@ -37,14 +31,11 @@ export default async function Organizations() {
 							<Link href={`/${organization.slug}`}>
 								<div className="flex items-start justify-between">
 									<div className="flex items-center space-x-3">
-										<Avatar className="size-10 rounded-full">
-											<AvatarImage
-												src={
-													organization.avatarUrl ||
-													`${DICEBEAR_AVATAR_URL}${organization.name}`
-												}
-											/>
-										</Avatar>
+										<AvatarWithFallback
+											className="size-10 rounded-full"
+											src={organization.avatarUrl}
+											alt={organization.name}
+										/>
 
 										<div>
 											<h2 className="truncate font-medium text-lg">
@@ -61,13 +52,8 @@ export default async function Organizations() {
 
 								<div className="flex items-center gap-4">
 									<div className="flex items-center space-x-1 text-muted-foreground text-sm">
-										<Factory className="size-4" />
-										<span>2 máquinas</span>
-									</div>
-
-									<div className="flex items-center space-x-1 text-muted-foreground text-sm">
 										<Cpu className="size-4" />
-										<span>5 dispositivos</span>
+										<span>{organization.devices} dispositivos</span>
 									</div>
 								</div>
 							</Link>

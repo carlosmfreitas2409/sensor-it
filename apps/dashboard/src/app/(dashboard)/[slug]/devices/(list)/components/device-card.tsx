@@ -1,16 +1,14 @@
 import type { Device } from '@/entities/device';
 
-import { DICEBEAR_AVATAR_URL } from '@sensor-it/utils/constants';
-
 import {
 	Card,
 	CardHeader,
 	Badge,
 	CardContent,
 	Separator,
-	Avatar,
-	AvatarImage,
 } from '@sensor-it/ui/components';
+
+import { AvatarWithFallback } from '@/components/avatar-fallback';
 
 import { statuses } from '../mock';
 
@@ -51,11 +49,11 @@ export function DeviceCard({ device }: DeviceCardProps) {
 				<div className="flex items-center justify-between">
 					<span className="font-medium text-sm">{device.machine}</span>
 
-					<Avatar className="size-6">
-						<AvatarImage
-							src={`${DICEBEAR_AVATAR_URL}${device.assignee.name}`}
-						/>
-					</Avatar>
+					<AvatarWithFallback
+						className="size-6"
+						src={device.assignee.avatarUrl}
+						alt={device.assignee.name}
+					/>
 				</div>
 			</CardContent>
 		</Card>

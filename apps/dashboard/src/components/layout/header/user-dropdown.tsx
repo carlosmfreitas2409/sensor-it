@@ -4,13 +4,9 @@ import type { User } from '@/entities/user';
 
 import { signOut } from '@/lib/auth/actions';
 
-import { DICEBEAR_AVATAR_URL } from '@sensor-it/utils/constants';
-
 import { LogOut, Settings } from '@sensor-it/ui/icons';
 
 import {
-	Avatar,
-	AvatarImage,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
@@ -18,6 +14,8 @@ import {
 	DropdownMenuTrigger,
 	Skeleton,
 } from '@sensor-it/ui/components';
+
+import { AvatarWithFallback } from '@/components/avatar-fallback';
 
 interface UserDropdownProps {
 	user: User | null;
@@ -28,11 +26,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
 		<DropdownMenu>
 			<DropdownMenuTrigger className="relative">
 				{user ? (
-					<Avatar>
-						<AvatarImage
-							src={user.avatarUrl || `${DICEBEAR_AVATAR_URL}${user.name}`}
-						/>
-					</Avatar>
+					<AvatarWithFallback src={user.avatarUrl} alt={user.name} />
 				) : (
 					<Skeleton className="size-10 rounded-full bg-red-500" />
 				)}

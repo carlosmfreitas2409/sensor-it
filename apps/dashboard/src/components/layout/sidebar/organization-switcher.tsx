@@ -1,6 +1,4 @@
 import Link from 'next/link';
-
-import { DICEBEAR_AVATAR_URL } from '@sensor-it/utils/constants';
 import { cn } from '@sensor-it/utils';
 
 import { getOrganizationSlug } from '@/lib/auth';
@@ -10,8 +8,6 @@ import { listOrganizations } from '@/services/organizations/list-organizations';
 import { Check, ChevronsUpDown, PlusCircle } from '@sensor-it/ui/icons';
 
 import {
-	Avatar,
-	AvatarImage,
 	Button,
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,6 +17,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@sensor-it/ui/components';
+
+import { AvatarWithFallback } from '@/components/avatar-fallback';
 
 export async function OrganizationSwitcher() {
 	const slug = getOrganizationSlug();
@@ -39,14 +37,11 @@ export async function OrganizationSwitcher() {
 		<DropdownMenu>
 			<DropdownMenuTrigger className="flex h-16 w-full items-center justify-between gap-2 rounded-xl border p-3">
 				<div className="flex flex-1 items-center gap-3 overflow-hidden">
-					<Avatar className="rounded-xl">
-						<AvatarImage
-							src={
-								selectedOrganization?.avatarUrl ||
-								`${DICEBEAR_AVATAR_URL}${selectedOrganization?.name}`
-							}
-						/>
-					</Avatar>
+					<AvatarWithFallback
+						className="rounded-xl"
+						src={selectedOrganization?.avatarUrl}
+						alt={selectedOrganization?.name || ''}
+					/>
 
 					<div className="flex flex-col overflow-hidden text-left">
 						<p className="truncate font-bold text-sm leading-5">
@@ -92,14 +87,11 @@ export async function OrganizationSwitcher() {
 								asChild
 							>
 								<Link href={`/${organization.slug}`}>
-									<Avatar className="size-7">
-										<AvatarImage
-											src={
-												organization.avatarUrl ||
-												`${DICEBEAR_AVATAR_URL}${organization.name}`
-											}
-										/>
-									</Avatar>
+									<AvatarWithFallback
+										className="size-7"
+										src={organization.avatarUrl}
+										alt={organization.name}
+									/>
 
 									<span
 										className={cn(
