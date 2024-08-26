@@ -13,13 +13,13 @@
 	},
 	"dependencies": {
 		"@sensor-it/auth": "workspace:*",
-		"drizzle-orm": "^0.31.2",
+		"drizzle-orm": "^0.33.0",
 		"postgres": "^3.4.4"
 	},
 	"devDependencies": {
 		"@sensor-it/env": "workspace:*",
 		"@sensor-it/tsconfig": "workspace:*",
 		"@types/bun": "^1.1.4",
-		"drizzle-kit": "^0.22.7"
+		"drizzle-kit": "^0.24.1"
 	}
 }
