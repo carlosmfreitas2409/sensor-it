@@ -56,6 +56,16 @@ BLECharacteristic *create_wifi_status_characteristic(BLEService *service) {
   return c;
 }
 
+void create_scan_status_characteristic(BLEService *service, BLECharacteristicCallbacks *pCallbacks) {
+  BLECharacteristic *c = service->createCharacteristic(
+    BP_SCAN_STATUS_CHAR_UUID,
+    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
+  );
+
+  c->setCallbacks(pCallbacks);
+  c->setValue("PENDING");
+}
+
 void printQR(const char *name, const char *model, const char *snid) {
   char payload[150] = {0};
 
@@ -78,6 +88,7 @@ void BLEProvisioning::init(const char *name, const char *model, const char *snid
   create_wifi_ssid_characteristic(pService, this);
   create_wifi_password_characteristic(pService, this);
   this->_status_char = create_wifi_status_characteristic(pService);
+  create_scan_status_characteristic(pService, this);
   
   pService->start();
 
@@ -96,15 +107,9 @@ void BLEProvisioning::onWrite(BLECharacteristic *c) {
   if (c->getUUID().toString().compare(BP_WIFI_SSID_CHAR_UUID) == 0) {
     this->wifi_ssid = c->getValue();
     this->_credentials_status |= 1 << WIFI_SSID_SET_BIT;
-    
-    Serial.print("SSID set: ");
-    Serial.println(this->wifi_ssid.c_str());
   } else if (c->getUUID().toString().compare(BP_WIFI_PASS_CHAR_UUID) == 0) {
     this->wifi_password = c->getValue();
     this->_credentials_status |= 1 << WIFI_PASS_SET_BIT;
-
-    Serial.print("Password set: ");
-    Serial.println(this->wifi_password.c_str());
   } else if (c->getUUID().toString().compare(BP_NETWORK_SCAN_CHAR_UUID) == 0) {
     String output = this->_scan_callback();
 
@@ -124,6 +129,10 @@ void BLEProvisioning::onWrite(BLECharacteristic *c) {
     } else {
       c->setValue(output.c_str());
       c->notify();
+    }
+  } else if (c->getUUID().toString().compare(BP_SCAN_STATUS_CHAR_UUID) == 0) {
+    if (c->getValue().compare("COMPLETED") == 0) {
+      BLEDevice::deinit(true);
     }
   }
 

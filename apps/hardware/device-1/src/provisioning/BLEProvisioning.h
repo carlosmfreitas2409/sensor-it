@@ -7,11 +7,12 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 
-#define BP_SERVICE_UUID           "3b8a3538-bd08-4124-8184-6ed1b17d3405"
-#define BP_WIFI_SSID_CHAR_UUID    "0374b073-9979-40b5-81ab-c2d9840c7ed7"
-#define BP_WIFI_PASS_CHAR_UUID    "fee597c1-6051-4247-8b1f-f5d1a7e6dce6"
-#define BP_WIFI_STATUS_CHAR_UUID  "961b1ff7-4259-4058-85cc-3435c85cd704"
-#define BP_NETWORK_SCAN_CHAR_UUID "489ab6fc-334b-4a0f-b11f-7dff297aebb4"
+#define BP_SERVICE_UUID             "3b8a3538-bd08-4124-8184-6ed1b17d3405"
+#define BP_WIFI_SSID_CHAR_UUID      "0374b073-9979-40b5-81ab-c2d9840c7ed7"
+#define BP_WIFI_PASS_CHAR_UUID      "fee597c1-6051-4247-8b1f-f5d1a7e6dce6"
+#define BP_WIFI_STATUS_CHAR_UUID    "961b1ff7-4259-4058-85cc-3435c85cd704"
+#define BP_NETWORK_SCAN_CHAR_UUID   "489ab6fc-334b-4a0f-b11f-7dff297aebb4"
+#define BP_SCAN_STATUS_CHAR_UUID    "e0d77302-0eb1-4a1e-9d07-a819f7b22d56"
 
 #define MAX_ATTR_LEN 512
 
