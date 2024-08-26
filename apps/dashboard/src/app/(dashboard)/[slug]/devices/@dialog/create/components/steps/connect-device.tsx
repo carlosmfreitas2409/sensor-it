@@ -5,15 +5,15 @@ import { type IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
 
 import Rive from '@rive-app/react-canvas-lite';
 
-import { useDevice } from '@/hooks/use-device';
-
 import {
 	DialogHeader,
 	DialogTitle,
 	DialogDescription,
 } from '@sensor-it/ui/components';
 
-import { type CreateDeviceFormData, Step } from '../schema';
+import { useDevice } from '../device-manager';
+
+import { type CreateDeviceFormData, Step } from '../../schema';
 
 interface QrCodeData {
 	name: string;
@@ -21,14 +21,10 @@ interface QrCodeData {
 	serialNumber: string;
 }
 
-interface ConnectDeviceStepProps {
-	onConnectDevice: (device: BluetoothRemoteGATTService) => void;
-}
-
-export function ConnectDeviceStep({ onConnectDevice }: ConnectDeviceStepProps) {
+export function ConnectDeviceStep() {
 	const form = useFormContext<CreateDeviceFormData>();
 
-	const { connectToDevice } = useDevice();
+	const { setDevice, connectToDevice } = useDevice();
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +44,7 @@ export function ConnectDeviceStep({ onConnectDevice }: ConnectDeviceStepProps) {
 				throw new Error('Device not found');
 			}
 
-			onConnectDevice(device);
+			setDevice(device);
 
 			form.setValue('step', Step.SETUP_NETWORK);
 			form.setValue('model', model);

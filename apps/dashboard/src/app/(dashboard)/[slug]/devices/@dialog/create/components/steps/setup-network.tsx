@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 
-import { useDevice } from '@/hooks/use-device';
-
 import {
 	Accordion,
 	DialogDescription,
@@ -12,31 +10,29 @@ import {
 	ScrollArea,
 } from '@sensor-it/ui/components';
 
-import { NetworksSkeleton } from './networks-skeleton';
-import { NetworkItem } from './network-item';
+import { useDevice } from '../device-manager';
 
-import { Step, type CreateDeviceFormData } from '../schema';
+import { NetworksSkeleton } from '../networks-skeleton';
+import { NetworkItem } from '../network-item';
 
-interface SetupNetworkStepProps {
-	device: BluetoothRemoteGATTService | null;
-}
+import { Step, type CreateDeviceFormData } from '../../schema';
 
-export function SetupNetworkStep({ device }: SetupNetworkStepProps) {
+export function SetupNetworkStep() {
 	const [isConnecting, setIsConnecting] = useState(false);
-
-	const form = useFormContext<CreateDeviceFormData>();
 
 	const { getNetworks, connectToWiFi } = useDevice();
 
+	const form = useFormContext<CreateDeviceFormData>();
+
 	const { data: networks, isLoading } = useQuery({
 		queryKey: ['networks'],
-		queryFn: () => getNetworks(device),
+		queryFn: () => getNetworks(),
 	});
 
 	async function handleConnectWiFi(ssid: string, password: string) {
 		setIsConnecting(true);
 
-		const isConnected = await connectToWiFi(device, ssid, password);
+		const isConnected = await connectToWiFi(ssid, password);
 
 		if (isConnected) {
 			form.setValue('step', Step.SETUP_DEVICE);
