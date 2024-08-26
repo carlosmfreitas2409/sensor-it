@@ -1,0 +1,26 @@
+{
+	"name": "@sensor-it/helios",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"build": "bun build --compile --minify --sourcemap src/infra/http/server.ts --outfile dist/app",
+		"dev": "bun env:load bun run --watch src/infra/http/server.ts",
+		"dev:mqtt": "bun env:load bun run --watch src/infra/mqtt/app.ts",
+		"lint": "biome lint ./src",
+		"format": "biome format --write ./src",
+		"env:load": "dotenv -e ../../.env --"
+	},
+	"dependencies": {
+		"@elysiajs/cors": "^1.0.4",
+		"@elysiajs/jwt": "^1.0.2",
+		"@sensor-it/auth": "workspace:*",
+		"@sensor-it/env": "workspace:*",
+		"elysia": "1.0.27",
+		"mqtt": "^5.10.0",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@sensor-it/tsconfig": "workspace:*",
+		"@types/bun": "^1.1.4"
+	}
+}

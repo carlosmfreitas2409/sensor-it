@@ -11,6 +11,10 @@ export const env = createEnv({
 		GOOGLE_OAUTH_CLIENT_ID: z.string().min(1),
 		GOOGLE_OAUTH_CLIENT_SECRET: z.string().min(1),
 		GOOGLE_OAUTH_REDIRECT_URI: z.string().url(),
+
+		MQTT_BROKER: z.string().url(),
+		MQTT_USERNAME: z.string(),
+		MQTT_PASSWORD: z.string(),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,

@@ -20,20 +20,10 @@
 		},
 		"lint": {},
 		"format": {},
-		"ui:add": {
-			"cache": false
-		},
-		"studio": {
-			"cache": false
-		},
-		"generate": {
-			"cache": false
-		},
-		"migrate": {
-			"cache": false
-		},
-		"seed": {
-			"cache": false
-		}
+		"ui:add": {},
+		"studio": {},
+		"generate": {},
+		"migrate": {},
+		"seed": {}
 	}
 }
