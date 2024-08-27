@@ -1,4 +1,4 @@
-name: [Helios] Deploy
+name: "[Helios] Deploy"
 
 on:
   workflow_call:
