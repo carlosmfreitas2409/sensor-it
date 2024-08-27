@@ -5,13 +5,15 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-
 jobs:
-  deploy_api:
+  api:
     uses: ./.github/workflows/deploy-api.yml
+    secrets:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
-  deploy_helios:
+  helios:
     uses: ./.github/workflows/deploy-helios.yml
+    secrets:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
