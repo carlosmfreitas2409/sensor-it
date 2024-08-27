@@ -16,8 +16,13 @@ export function Sidebar() {
 
 			<nav className="flex flex-col gap-1 px-4">
 				<NavItem path={`/${slug}`} name="Painel de controle" icon="Home" />
-				<NavItem path={`/${slug}/analytics`} name="Métricas" icon="AreaChart" />
 				<NavItem path={`/${slug}/devices`} name="Dispositivos" icon="Cpu" />
+				<NavItem
+					path={`/${slug}/analytics`}
+					name="Métricas"
+					icon="AreaChart"
+					isComingSoon
+				/>
 			</nav>
 
 			<div className="mt-auto space-y-4 px-4 pb-6">
