@@ -55,6 +55,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ~/app/api
-            pm2 restart sensor-it_api
+          script: pm2 restart sensor-it_api

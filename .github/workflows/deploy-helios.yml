@@ -51,6 +51,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ~/app/helios
-            pm2 restart sensor-it_helios
+          script: pm2 restart sensor-it_helios
