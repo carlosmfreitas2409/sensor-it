@@ -11,7 +11,7 @@ env:
 
 jobs:
   deploy_api:
-    uses: ./.github/workflows/deploy_api.yml
+    uses: ./.github/workflows/deploy-api.yml
 
   deploy_helios:
-    uses: ./.github/workflows/deploy_helios.yml
+    uses: ./.github/workflows/deploy-helios.yml
