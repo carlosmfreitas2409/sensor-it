@@ -7,6 +7,18 @@ on:
         required: true
       TURBO_TEAM:
         required: true
+      MACHINE_IDENTITY_CLIENT_ID:
+        required: true
+      MACHINE_IDENTITY_CLIENT_SECRET:
+        required: true
+      SSH_HOST:
+        required: true
+      SSH_USER:
+        required: true
+      SSH_KEY:
+        required: true
+      SSH_PORT:
+        required: true
         
 jobs:
   check:
