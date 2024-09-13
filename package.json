@@ -10,7 +10,6 @@
 		"ui:add": "turbo --filter=@sensor-it/ui ui:add --",
 		"db": "turbo --filter=@sensor-it/db",
 		"api": "turbo --filter=@sensor-it/api",
-		"helios": "turbo --filter=@sensor-it/helios",
 		"dashboard": "turbo --filter=@sensor-it/dashboard",
 		"www": "turbo --filter=@sensor-it/www"
 	},

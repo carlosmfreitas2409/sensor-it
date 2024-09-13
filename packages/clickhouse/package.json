@@ -1,0 +1,21 @@
+{
+	"name": "@sensor-it/clickhouse",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"scripts": {
+		"migrate": "bun env:load bun src/migrate.ts",
+		"env:load": "dotenv -e ../../.env --",
+		"lint": "biome lint ./src",
+		"format": "biome format --write ./src"
+	},
+	"dependencies": {
+		"@clickhouse/client": "^1.5.0",
+		"@sensor-it/auth": "workspace:*"
+	},
+	"devDependencies": {
+		"@sensor-it/env": "workspace:*",
+		"@sensor-it/tsconfig": "workspace:*",
+		"@types/bun": "^1.1.4",
+		"clickhouse-migrations": "^0.1.14"
+	}
+}

@@ -9,7 +9,3 @@ jobs:
   api:
     uses: ./.github/workflows/deploy-api.yml
     secrets: inherit
-
-  helios:
-    uses: ./.github/workflows/deploy-helios.yml
-    secrets: inherit

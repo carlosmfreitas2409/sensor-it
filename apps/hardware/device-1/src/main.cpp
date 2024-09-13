@@ -128,10 +128,10 @@ void loop() {
   if (now - lastMsg > 10000) {
     lastMsg = now;
     if (flag == 0) {
-       mqttClient.publish("helios.add-metric", "000");
+      mqttClient.publish("hardware.add-metric", "000");
       // Serial.println("000");
     } else {
-       mqttClient.publish("helios.add-metric", "111");
+      mqttClient.publish("hardware.add-metric", "111");
       // Serial.println("111");
     }
     flag = !flag;

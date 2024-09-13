@@ -15,6 +15,8 @@ export const env = createEnv({
 		MQTT_BROKER: z.string().url(),
 		MQTT_USERNAME: z.string(),
 		MQTT_PASSWORD: z.string(),
+
+		CLICKHOUSE_URL: z.string().url(),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,

@@ -1,11 +1,23 @@
 import { Button } from '@sensor-it/ui/components';
 import { ChevronRight, Download, Filter } from '@sensor-it/ui/icons';
 
+import { getOrganizationSlug } from '@/lib/auth';
+
+import { getGeneralMetrics } from '@/services/metrics/get-general-metrics';
+
 import { FailureAverageCard } from '@/components/dashboard/failure-average-card';
 import { OperationCard } from '@/components/dashboard/operation-card';
 import { StatsCard } from '@/components/dashboard/stats-card';
 
-export default function Dashboard() {
+export default async function Dashboard() {
+	const slug = getOrganizationSlug();
+
+	if (!slug) {
+		return null;
+	}
+
+	const metrics = await getGeneralMetrics(slug);
+
 	return (
 		<div className="flex flex-1 flex-col gap-6">
 			<div className="flex items-center justify-between gap-6">
@@ -25,22 +37,21 @@ export default function Dashboard() {
 
 			<div className="grid grid-cols-3 gap-5">
 				<StatsCard
-					type="rise"
-					title="Total de máquina"
-					value={2420}
-					percentage={40}
+					title="Total de dispositivos"
+					value={metrics.devices.total}
+					percentage={metrics.devices.percentageOverLastMonth}
 				/>
+
 				<StatsCard
-					type="fall"
+					title="Dispositivos ativos"
+					value={metrics.activeDevices.total}
+					percentage={metrics.activeDevices.percentageOverLastMonth}
+				/>
+
+				<StatsCard
 					title="Máquinas com falha"
-					value={1210}
-					percentage={10}
-				/>
-				<StatsCard
-					type="rise"
-					title="Máquinas ativas"
-					value={316}
-					percentage={20}
+					value={metrics.failedMachines.total}
+					percentage={metrics.failedMachines.percentageOverLastMonth}
 				/>
 			</div>
 

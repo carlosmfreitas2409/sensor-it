@@ -1,6 +1,7 @@
 import { type InsertDevice, type Device, devices } from '@sensor-it/db';
 
 import { db } from '@/infra/lib/drizzle';
+import { clickHouse } from '@/infra/lib/clickhouse';
 
 import type { IDeviceRepository } from '../interfaces/device-repository';
 
@@ -33,6 +34,15 @@ export class DrizzleDeviceRepository implements IDeviceRepository {
 
 	async create(dto: InsertDevice): Promise<Device> {
 		const [device] = await this.drizzle.insert(devices).values(dto).returning();
+
+		await clickHouse.devicesMetadata.insert({
+			timestamp: new Date(),
+			organizationId: dto.organizationId,
+			deviceId: device.id,
+			serialNumber: dto.serialNumber,
+			createdAt: device.createdAt,
+			deleted: 0,
+		});
 
 		return device;
 	}

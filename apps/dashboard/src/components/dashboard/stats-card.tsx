@@ -40,22 +40,26 @@ const fallChartConfig = {
 
 interface StatsCardProps {
 	title: string;
-	type: 'rise' | 'fall';
 	value: number;
 	percentage: number;
 }
 
-export function StatsCard({ title, type, value, percentage }: StatsCardProps) {
+export function StatsCard({ title, value, percentage }: StatsCardProps) {
 	const id = useId();
 
 	const formattedValue = new Intl.NumberFormat('pt-BR').format(value);
+	const formattedPercentage = new Intl.NumberFormat('pt-BR', {
+		style: 'percent',
+		maximumFractionDigits: 0,
+		signDisplay: 'never',
+	}).format(percentage);
 
-	const chartConfig = type === 'fall' ? fallChartConfig : riseChartConfig;
+	const chartConfig = percentage < 0 ? fallChartConfig : riseChartConfig;
 
 	const data = useMemo(() => {
 		const dataClone = [...chartData];
-		return type === 'fall' ? dataClone.reverse() : dataClone;
-	}, [type]);
+		return percentage < 0 ? dataClone.reverse() : dataClone;
+	}, [percentage]);
 
 	return (
 		<Card>
@@ -70,17 +74,17 @@ export function StatsCard({ title, type, value, percentage }: StatsCardProps) {
 					<div
 						className={cn(
 							'flex items-center text-sm',
-							type === 'fall' && 'text-destructive',
-							type === 'rise' && 'text-success',
+							percentage < 0 && 'text-destructive',
+							percentage >= 0 && 'text-success',
 						)}
 					>
-						{type === 'fall' ? (
+						{percentage < 0 ? (
 							<ArrowDown className="mr-1 size-4" />
 						) : (
 							<ArrowUp className="mr-1 size-4" />
 						)}
 
-						<span className="font-medium">{percentage}%</span>
+						<span className="font-medium">{formattedPercentage}</span>
 						<span className="ml-1 text-muted-foreground">vs último mês</span>
 					</div>
 				</div>
@@ -95,6 +99,7 @@ export function StatsCard({ title, type, value, percentage }: StatsCardProps) {
 										stopColor="var(--color-machines)"
 										stopOpacity={0.8}
 									/>
+
 									<stop
 										offset="95%"
 										stopColor="var(--color-machines)"

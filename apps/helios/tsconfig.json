@@ -1,9 +1,0 @@
-{
-	"extends": "@sensor-it/tsconfig/base.json",
-	"compilerOptions": {
-		"noUncheckedIndexedAccess": false,
-		"paths": {
-			"@/*": ["./src/*"]
-		}
-	}
-}
