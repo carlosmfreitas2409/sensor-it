@@ -1,6 +1,9 @@
 {
 	"name": "@sensor-it/env",
-	"files": ["server.ts", "client.ts"],
+	"files": [
+		"server.ts",
+		"client.ts"
+	],
 	"devDependencies": {
 		"@sensor-it/tsconfig": "workspace:*",
 		"@types/bun": "^1.1.4"

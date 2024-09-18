@@ -1,6 +1,5 @@
-import { type InsertDevice, type Device, devices } from '@sensor-it/db';
+import { db, type InsertDevice, type Device, devices } from '@/infra/db';
 
-import { db } from '@/infra/lib/drizzle';
 import { clickHouse } from '@/infra/lib/clickhouse';
 
 import type { IDeviceRepository } from '../interfaces/device-repository';

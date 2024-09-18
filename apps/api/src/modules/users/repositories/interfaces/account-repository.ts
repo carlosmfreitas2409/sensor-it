@@ -1,4 +1,4 @@
-import type { Account, InsertAccount } from '@sensor-it/db';
+import type { Account, InsertAccount } from '@/infra/db';
 
 export interface IAccountRepository {
 	findByUserIdAndProvider(

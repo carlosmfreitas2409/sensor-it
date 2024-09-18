@@ -21,9 +21,9 @@
 		"lint": {},
 		"format": {},
 		"ui:add": {},
-		"studio": {},
-		"generate": {},
-		"migrate": {},
-		"seed": {}
+		"db:studio": {},
+		"db:generate": {},
+		"db:migrate": {},
+		"db:seed": {}
 	}
 }

@@ -1,6 +1,4 @@
-import { accounts, type InsertAccount, type Account } from '@sensor-it/db';
-
-import { db } from '@/infra/lib/drizzle';
+import { db, accounts, type InsertAccount, type Account } from '@/infra/db';
 
 import type { IAccountRepository } from '../interfaces/account-repository';
 

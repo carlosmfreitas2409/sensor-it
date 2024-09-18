@@ -1,4 +1,4 @@
-import type { deviceModelEnum } from '@sensor-it/db';
+import type { deviceModelEnum } from '@/infra/db';
 
 type Model = (typeof deviceModelEnum.enumValues)[number];
 type Config = { image: string };

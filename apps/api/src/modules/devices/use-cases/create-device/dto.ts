@@ -1,5 +1,5 @@
 import type { IUseCase } from '@/core/infra/use-case';
-import type { deviceModelEnum } from '@sensor-it/db';
+import type { deviceModelEnum } from '@/infra/db';
 
 type CreateDeviceInput = {
 	organizationId: string;

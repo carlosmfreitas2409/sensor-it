@@ -1,6 +1,4 @@
-import { users, type InsertUser, type User } from '@sensor-it/db';
-
-import { db } from '@/infra/lib/drizzle';
+import { db, users, type InsertUser, type User } from '@/infra/db';
 
 import type { IUserRepository } from '../interfaces/user-repository';
 

@@ -1,12 +1,12 @@
 import { count, eq } from 'drizzle-orm';
+
 import {
+	db,
 	devices,
 	members,
 	organizations,
 	type Organization,
-} from '@sensor-it/db';
-
-import { db } from '@/infra/lib/drizzle';
+} from '@/infra/db';
 
 import type {
 	IOrganizationRepository,

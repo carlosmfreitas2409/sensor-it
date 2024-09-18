@@ -1,4 +1,4 @@
-import type { Device } from '@sensor-it/db';
+import type { Device } from '@/infra/db';
 
 import type { IUseCase } from '@/core/infra/use-case';
 

@@ -1,13 +1,12 @@
 import { and, eq } from 'drizzle-orm';
 
 import {
+	db,
 	members,
 	organizations,
 	type InsertMember,
 	type Member,
-} from '@sensor-it/db';
-
-import { db } from '@/infra/lib/drizzle';
+} from '@/infra/db';
 
 import type {
 	IMemberRepository,

@@ -1,4 +1,4 @@
-import type { InsertMember, Member, Organization, User } from '@sensor-it/db';
+import type { InsertMember, Member, Organization, User } from '@/infra/db';
 
 interface Membership {
 	organization: Organization;

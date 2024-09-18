@@ -1,4 +1,4 @@
-import type { Device, InsertDevice } from '@sensor-it/db';
+import type { Device, InsertDevice } from '@/infra/db';
 
 export interface IDeviceRepository {
 	listByOrganizationId(organizationId: string): Promise<Device[]>;

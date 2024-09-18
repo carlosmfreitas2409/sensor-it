@@ -1,4 +1,4 @@
-import type { InsertUser, User } from '@sensor-it/db';
+import type { InsertUser, User } from '@/infra/db';
 
 export interface IUserRepository {
 	findById(id: string): Promise<User | null>;

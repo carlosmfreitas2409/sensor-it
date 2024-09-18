@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
 
-import { deviceModelEnum } from '@sensor-it/db';
+import { deviceModelEnum } from '@/infra/db';
 
 import { auth } from '@/infra/http/plugins/auth';
 

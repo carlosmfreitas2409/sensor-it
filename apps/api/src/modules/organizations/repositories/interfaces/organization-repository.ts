@@ -1,4 +1,4 @@
-import type { Organization } from '@sensor-it/db';
+import type { Organization } from '@/infra/db';
 
 import type { OrganizationWithUserRole } from '../../dtos/repositories/organization-with-user-role';
 

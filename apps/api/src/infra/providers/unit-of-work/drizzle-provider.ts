@@ -1,4 +1,4 @@
-import { db, type IDatabaseConnection } from '@/infra/lib/drizzle';
+import { db, type IDatabaseConnection } from '@/infra/db';
 
 import type { IUnitOfWork, Query } from './model';
 
