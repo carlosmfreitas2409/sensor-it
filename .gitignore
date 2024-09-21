@@ -60,3 +60,6 @@ next-env.d.ts
 
 # Metro
 .metro-health-check*
+
+# Volume
+.data

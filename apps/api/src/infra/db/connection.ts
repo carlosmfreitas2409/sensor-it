@@ -7,7 +7,7 @@ import * as schema from './schema';
 
 export type IDatabaseConnection = typeof db;
 
-const client = postgres(env.DATABASE_URL, {
+const client = postgres(env.ATLAS_DATABASE_URL, {
 	ssl: env.DATABASE_SSL ? 'require' : false,
 });
 

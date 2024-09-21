@@ -7,7 +7,7 @@ export default defineConfig({
 	schema: './src/infra/db/schema/index.ts',
 	dialect: 'postgresql',
 	dbCredentials: {
-		url: env.DATABASE_URL,
+		url: env.ATLAS_DATABASE_URL,
 		ssl: env.DATABASE_SSL ? 'require' : false,
 	},
 });

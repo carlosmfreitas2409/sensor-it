@@ -9,9 +9,9 @@
 		"env:load": "dotenv -e ../../.env --",
 		"lint": "biome lint ./src",
 		"format": "biome format --write ./src",
+		"db:generate": "bun env:load drizzle-kit generate",
 		"db:migrate": "bun env:load bun scripts/db-migrate.ts",
 		"db:seed": "bun env:load bun scripts/db-seed.ts",
-		"db:generate": "bun env:load drizzle-kit generate",
 		"db:studio": "bun env:load drizzle-kit studio"
 	},
 	"dependencies": {
@@ -19,13 +19,16 @@
 		"@elysiajs/jwt": "^1.0.2",
 		"@sensor-it/auth": "workspace:*",
 		"@sensor-it/env": "workspace:*",
+		"@sensor-it/core": "workspace:*",
 		"drizzle-orm": "^0.33.0",
 		"elysia": "1.0.27",
 		"mqtt": "^5.10.1",
+		"postgres": "^3.4.4",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@sensor-it/tsconfig": "workspace:*",
-		"@types/bun": "^1.1.4"
+		"@types/bun": "^1.1.4",
+		"drizzle-kit": "^0.24.2"
 	}
 }
