@@ -1,6 +1,6 @@
 import { type Static, t } from 'elysia';
 
-import type { IUseCase } from '@/core/infra/use-case';
+import type { IUseCase } from '@sensor-it/core';
 
 const successResponse = t.Object({
 	user: t.Object({

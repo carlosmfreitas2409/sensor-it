@@ -1,8 +1,8 @@
 import { type Static, t } from 'elysia';
 
-import { roleSchema } from '@sensor-it/auth';
+import type { IUseCase } from '@sensor-it/core';
 
-import type { IUseCase } from '@/core/infra/use-case';
+import { roleSchema } from '@sensor-it/auth';
 
 const successResponse = t.Array(
 	t.Object({

@@ -1,4 +1,4 @@
-import type { IUseCase } from '@/core/infra/use-case';
+import type { IUseCase } from '@sensor-it/core';
 
 type GetGeneralMetricsInput = {
 	organizationId: string;

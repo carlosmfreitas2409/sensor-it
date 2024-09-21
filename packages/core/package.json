@@ -1,0 +1,13 @@
+{
+	"name": "@sensor-it/core",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"scripts": {
+		"lint": "biome lint ./src",
+		"format": "biome format --write ./src"
+	},
+	"devDependencies": {
+		"@sensor-it/tsconfig": "workspace:*",
+		"@types/bun": "^1.1.4"
+	}
+}

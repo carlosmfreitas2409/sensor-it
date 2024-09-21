@@ -1,6 +1,6 @@
-import type { DeviceEvent } from '@sensor-it/clickhouse';
+import type { IMqttHandler } from '@sensor-it/core';
 
-import type { IMqttHandler } from '@/core/infra/mqtt-handler';
+import type { DeviceEvent } from '@sensor-it/clickhouse';
 
 type AddMetricInput = {
 	serialNumber: string;

@@ -1,4 +1,4 @@
-import { HttpException } from '@/core/exceptions/http-exception';
+import { HttpException } from '@sensor-it/core';
 
 export class NotFoundException extends HttpException {
 	constructor(message: string) {

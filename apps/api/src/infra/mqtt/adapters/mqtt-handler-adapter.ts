@@ -1,4 +1,4 @@
-import type { IMqttHandler } from '@/core/infra/mqtt-handler';
+import type { IMqttHandler } from '@sensor-it/core';
 
 export const adaptMqttHandler = (handler: IMqttHandler) => {
 	return async (message: Buffer) => {

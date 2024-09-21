@@ -1,6 +1,6 @@
-import type { Device } from '@/infra/db';
+import type { IUseCase } from '@sensor-it/core';
 
-import type { IUseCase } from '@/core/infra/use-case';
+import type { Device } from '@/infra/db';
 
 type ListDevicesInput = {
 	organizationId: string;

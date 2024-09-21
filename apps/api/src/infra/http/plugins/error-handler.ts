@@ -1,6 +1,6 @@
 import type Elysia from 'elysia';
 
-import { HttpException } from '@/core/exceptions/http-exception';
+import { HttpException } from '@sensor-it/core';
 
 export const errorHandler = (app: Elysia) =>
 	app.error('HTTP_EXCEPTION', HttpException).onError(({ code, error, set }) => {
