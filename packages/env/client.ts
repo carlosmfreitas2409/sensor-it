@@ -12,6 +12,7 @@ export const env = createEnv({
 	},
 	client: {
 		NEXT_PUBLIC_API_URL: z.string().url(),
+		NEXT_PUBLIC_HOUSTON_API_URL: z.string().url(),
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
 	},
 	runtimeEnv: {
@@ -19,6 +20,7 @@ export const env = createEnv({
 		GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
 		GOOGLE_OAUTH_REDIRECT_URI: process.env.GOOGLE_OAUTH_REDIRECT_URI,
 		NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+		NEXT_PUBLIC_HOUSTON_API_URL: process.env.NEXT_PUBLIC_HOUSTON_API_URL,
 		NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
 	},

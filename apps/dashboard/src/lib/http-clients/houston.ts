@@ -2,8 +2,10 @@ import ky, { HTTPError } from 'ky';
 import { getCookie, deleteCookie } from 'cookies-next';
 import type { CookiesFn } from 'cookies-next/lib/types';
 
+import { env } from '@sensor-it/env/client';
+
 export const houstonApi = ky.create({
-	prefixUrl: 'http://localhost:3332',
+	prefixUrl: env.NEXT_PUBLIC_HOUSTON_API_URL,
 	retry: { limit: 3, methods: ['GET'], statusCodes: [401] },
 	hooks: {
 		beforeRequest: [
