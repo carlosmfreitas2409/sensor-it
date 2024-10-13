@@ -14,6 +14,18 @@
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**", "next-env.d.ts", "dist/**"]
 		},
+		"build:mqtt": {
+			"env": [
+				"DATABASE_URL",
+				"JWT_SECRET_KEY",
+				"GOOGLE_OAUTH_CLIENT_ID",
+				"GOOGLE_OAUTH_CLIENT_SECRET",
+				"GOOGLE_OAUTH_REDIRECT_URI"
+			],
+			"inputs": ["$TURBO_DEFAULT$", ".env"],
+			"dependsOn": ["^build:mqtt"],
+			"outputs": [".next/**", "!.next/cache/**", "next-env.d.ts", "dist/**"]
+		},
 		"dev": {
 			"cache": false,
 			"persistent": true

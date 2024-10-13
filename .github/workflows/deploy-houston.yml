@@ -68,11 +68,11 @@ jobs:
           source: "apps/houston/dist/,.env"
           target: "app/houston"
           strip_components: 3
-      # - name: Restart PM2 process
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     port: ${{ secrets.SSH_PORT }}
-      #     script: pm2 restart sensor-it_api
+      - name: Restart PM2 process
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: pm2 restart sensor-it_houston

@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Build
-        run: bun api build
+        run: bun api build && bun api build:mqtt
       - name: Export secrets to env file
         uses: Infisical/secrets-action@v1.0.7
         with:
@@ -75,4 +75,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: pm2 restart sensor-it_api
+          script: pm2 restart sensor-it_api && pm2 restart sensor-it_mqtt

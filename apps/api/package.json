@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"build": "bun build --compile --minify --sourcemap src/infra/http/server.ts --outfile dist/app",
+		"build:mqtt": "bun build --compile --minify --sourcemap src/infra/mqtt/app.ts --outfile dist/mqtt",
 		"dev": "bun env:load bun run --watch src/infra/http/server.ts",
 		"dev:mqtt": "bun env:load bun run --watch src/infra/mqtt/app.ts",
 		"env:load": "dotenv -e ../../.env --",

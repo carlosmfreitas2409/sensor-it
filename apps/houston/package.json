@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
+		"build": "bun build --compile --minify --sourcemap src/http/server.ts --outfile dist/app",
 		"dev": "bun env:load bun run --watch src/http/server.ts",
 		"lint": "biome lint ./src",
 		"format": "biome format --write ./src",
