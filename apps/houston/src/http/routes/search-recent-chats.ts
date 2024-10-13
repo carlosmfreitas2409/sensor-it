@@ -1,7 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { and, desc, eq, ilike, sql } from 'drizzle-orm';
 
-import { chats, db } from '@/infra/db';
+import { chats, db } from '@/db';
 
 import { auth } from '../auth';
 

@@ -6,6 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  api:
-    uses: ./.github/workflows/deploy-api.yml
+  atlas:
+    uses: ./.github/workflows/deploy-atlas.yml
     secrets: inherit
+
+  houston:
+    uses: ./.github/workflows/deploy-houston.yml
+    secrets: inherit
+
+  # atlas:
+  #   uses: ./.github/workflows/deploy.yml
+  #   secrets: inherit
+  #   with:
+  #     app: "@sensor-it/atlas"
+  #     build_cmd: "bun atlas build"
+  #     migrate_cmd: "bun atlas db:migrate"
+
+  # houston:
+  #   uses: ./.github/workflows/deploy.yml
+  #   secrets: inherit
+  #   with:
+  #     app: "@sensor-it/houston"
+  #     build_cmd: "bun houston build"
+  #     migrate_cmd: "bun houston db:migrate"

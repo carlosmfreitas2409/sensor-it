@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
 
-import { db } from '@/infra/db';
+import { db } from '@/db';
 
 import { auth } from '../auth';
 
