@@ -1,0 +1,38 @@
+NODE threshold_temperature
+SQL >
+  %
+  SELECT 
+    quantile(0.05)(value) AS cold_threshold,
+    quantile(0.95)(value) AS hot_threshold
+  FROM 
+    device_events 
+  WHERE 
+    type = 'temperature' 
+    AND serial_number = {{ String(serialNumber, '10:06:1C:68:7E:DC', description="The serial number of the device", required=True) }}
+    {% if defined(start) %} AND timestamp >= {{ DateTime(start) }} {% end %}
+    {% if defined(end) %} AND timestamp <= {{ DateTime(end) }} {% end %}
+
+NODE current_temperature
+SQL >
+  %
+  SELECT value AS last_temp
+  FROM 
+    device_events 
+  WHERE 
+    type = 'temperature' 
+    AND serial_number = {{ String(serialNumber, '10:06:1C:68:7E:DC', description="The serial number of the device", required=True) }}
+    {% if defined(start) %} AND timestamp >= {{ DateTime(start) }} {% end %}
+    {% if defined(end) %} AND timestamp <= {{ DateTime(end) }} {% end %}
+  GROUP BY timestamp, value
+  ORDER BY timestamp DESC 
+  LIMIT 1
+
+NODE endpoint
+SQL >
+  %
+  SELECT
+    cold_threshold,
+    hot_threshold,
+    last_temp
+  FROM threshold_temperature, current_temperature
+  

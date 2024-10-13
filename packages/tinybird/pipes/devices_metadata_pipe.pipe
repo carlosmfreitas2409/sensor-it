@@ -1,0 +1,7 @@
+NODE mv
+
+SQL >
+  SELECT * FROM devices_metadata
+
+TYPE materialized
+DATASOURCE devices_metadata_latest

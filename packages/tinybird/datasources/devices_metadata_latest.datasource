@@ -1,0 +1,14 @@
+# Data Source created from Pipe 'devices_metadata_pipe'
+
+SCHEMA >
+    `timestamp` DateTime,
+    `device_id` String,
+    `serial_number` String,
+    `organization_id` String,
+    `created_at` DateTime64(3),
+    `deleted` UInt8
+
+ENGINE "ReplacingMergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(timestamp)"
+ENGINE_SORTING_KEY "device_id"
+ENGINE_VER "timestamp"

@@ -1,7 +1,10 @@
 import Link from 'next/link';
-import { cn } from '@sensor-it/utils';
+import { useQuery } from '@tanstack/react-query';
 
-import { getOrganizationSlug } from '@/lib/auth';
+import { cn } from '@sensor-it/utils';
+import { PLANS } from '@sensor-it/utils/constants';
+
+import { useOrganization } from '@/hooks/use-organization';
 
 import { listOrganizations } from '@/services/organizations/list-organizations';
 
@@ -16,17 +19,28 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
+	Skeleton,
 } from '@sensor-it/ui/components';
 
 import { AvatarWithFallback } from '@/components/avatar-fallback';
 
-export async function OrganizationSwitcher() {
-	const slug = getOrganizationSlug();
+import { useModal } from '@/components/modal-provider';
 
-	const organizations = await listOrganizations();
+export function OrganizationSwitcher() {
+	const currentOrganization = useOrganization();
 
-	const selectedOrganization = organizations.find(
-		(organization) => organization.slug === slug,
+	const { setShowCreateOrganizationDialog } = useModal();
+
+	// const organizations = await listOrganizations();
+
+	const { data: organizations } = useQuery({
+		queryKey: ['organizations'],
+		queryFn: listOrganizations,
+		initialData: [],
+	});
+
+	const activePlan = PLANS.find(
+		(plan) => plan.key === (currentOrganization?.plan || 'free'),
 	);
 
 	// if (!selectedOrganization) {
@@ -39,18 +53,25 @@ export async function OrganizationSwitcher() {
 				<div className="flex flex-1 items-center gap-3 overflow-hidden">
 					<AvatarWithFallback
 						className="rounded-xl"
-						src={selectedOrganization?.avatarUrl}
-						alt={selectedOrganization?.name || ''}
+						src={currentOrganization?.avatarUrl}
+						alt={currentOrganization?.name || ''}
 					/>
 
-					<div className="flex flex-col overflow-hidden text-left">
-						<p className="truncate font-bold text-sm leading-5">
-							{selectedOrganization?.name}
-						</p>
-						<p className="truncate text-muted-foreground text-xs leading-4">
-							Plano básico
-						</p>
-					</div>
+					{!currentOrganization.isLoading ? (
+						<div className="flex flex-col overflow-hidden text-left">
+							<p className="truncate font-bold text-sm leading-5">
+								{currentOrganization?.name}
+							</p>
+							<p className="truncate text-muted-foreground text-xs leading-4">
+								Plano {activePlan?.name}
+							</p>
+						</div>
+					) : (
+						<div className="flex flex-col space-y-1">
+							<Skeleton className="h-5 w-20" />
+							<Skeleton className="h-4 w-24" />
+						</div>
+					)}
 				</div>
 
 				<ChevronsUpDown className="size-4" />
@@ -78,7 +99,7 @@ export async function OrganizationSwitcher() {
 
 				<DropdownMenuGroup className="space-y-1">
 					{organizations.map((organization) => {
-						const isSelected = selectedOrganization?.slug === organization.slug;
+						const isSelected = currentOrganization?.slug === organization.slug;
 
 						return (
 							<DropdownMenuItem
@@ -111,7 +132,11 @@ export async function OrganizationSwitcher() {
 
 				<DropdownMenuSeparator className="my-2" />
 
-				<DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() => {
+						setShowCreateOrganizationDialog(true);
+					}}
+				>
 					<PlusCircle className="mr-2 size-5" />
 					<span>Adiciona nova organização</span>
 				</DropdownMenuItem>

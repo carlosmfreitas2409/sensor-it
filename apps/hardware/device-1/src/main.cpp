@@ -3,30 +3,64 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
+#include <Preferences.h>
+
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+#include <arduinoFFT.h>
+#include <max6675.h>
 
 #include "secrets.h"
 
 #include "provisioning/BLEProvisioning.h"
 
-unsigned long lastMsg = 0;
-bool flag = 0;
+#define VIBRATION_PIN 14
+#define THERMO_DO_PIN 19
+#define THERMO_CS_PIN 2
+#define THERMO_CLK_PIN 18
+#define ACS_ADS_PIN 35
 
+#define SAMPLES 256
+#define SAMPLING_FREQUENCY 1000
+
+String ssid, password;
+bool usingBLE = true;
+
+double ax[SAMPLES];
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+double amplitudeVibrationX;
+
+Preferences preferences;
 BLEProvisioning bleProvisioning;
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 
-void wifiEventHandler(arduino_event_t *event) {  
+MAX6675 thermocouple(THERMO_CLK_PIN, THERMO_CS_PIN, THERMO_DO_PIN);
+Adafruit_MPU6050 mpu;
+ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLING_FREQUENCY);
+
+void wifiEventHandler(arduino_event_t *event) {
   switch (event->event_id) {
     case ARDUINO_EVENT_WIFI_STA_CONNECTED:
-      bleProvisioning.set_wifi_status(STATUS_CONNECTED);
+      if (usingBLE) {
+        bleProvisioning.set_wifi_status(STATUS_CONNECTED);
+      }
       break;
     case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
-      bleProvisioning.set_bad_credentials();
-      bleProvisioning.set_wifi_status(STATUS_DISCONNECTED);
+      if (usingBLE) {
+        bleProvisioning.set_bad_credentials();
+        bleProvisioning.set_wifi_status(STATUS_DISCONNECTED);
+      }
+
       break;
     case ARDUINO_EVENT_WIFI_STA_GOT_IP:
-      bleProvisioning.set_wifi_status(STATUS_GOT_IP);
+      if (usingBLE) {
+        bleProvisioning.set_wifi_status(STATUS_GOT_IP);
+      }
+
       break;
   }
 }
@@ -56,31 +90,6 @@ String scanNetworks() {
   return output;
 }
 
-void connectToWiFi(void *param) {
-  WiFi.begin(
-    bleProvisioning.wifi_ssid.c_str(),
-    bleProvisioning.wifi_password.c_str()
-  );
-
-  bleProvisioning.set_wifi_status(STATUS_CONNECTING);
-  Serial.println("\nConnecting");
-
-  while (WiFi.status() != WL_CONNECTED && !bleProvisioning.is_bad_credentials()) {
-    Serial.print(".");
-    delay(100);
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nConnected to the WiFi network");
-  }
-
-  vTaskDelete(NULL);
-}
-
-void onWiFiCredentialsReady() {
-  xTaskCreate(connectToWiFi, "ConnectTask", 10000, NULL, 1, NULL);
-}
-
 void connectToMQTT() {
   while (!mqttClient.connected()) {
     String clientId = DEVICE_NAME + String("-" + WiFi.macAddress());
@@ -98,42 +107,189 @@ void connectToMQTT() {
   }
 }
 
+void saveWiFiCredentials(const String &ssid, const String &password) {
+  preferences.begin("wifi", false);
+  preferences.putString("ssid", ssid);
+  preferences.putString("password", password);
+  preferences.end();
+}
+
+bool loadWiFiCredentials(String &ssid, String &password) {
+  preferences.begin("wifi", false);
+  ssid = preferences.getString("ssid", "");
+  password = preferences.getString("password", "");
+  preferences.end();
+  
+  return ssid.length() > 0;
+}
+
+void createConnections(void *param) {
+  if (usingBLE) {
+    ssid = bleProvisioning.wifi_ssid.c_str();
+    password = bleProvisioning.wifi_password.c_str();
+  }
+
+  WiFi.begin(ssid, password);
+
+  Serial.println("\nConnecting");
+
+  if (usingBLE) {
+    bleProvisioning.set_wifi_status(STATUS_CONNECTING);
+  }
+
+  while (WiFi.status() != WL_CONNECTED && !bleProvisioning.is_bad_credentials()) {
+    Serial.print(".");
+    delay(100);
+  }
+
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nConnected to the WiFi network");
+
+    if (usingBLE) {
+      saveWiFiCredentials(
+        bleProvisioning.wifi_ssid.c_str(),
+        bleProvisioning.wifi_password.c_str()
+      );
+    }
+
+    while (true) {
+      if (!mqttClient.connected()) {
+        connectToMQTT();
+      }
+
+      mqttClient.loop();
+    }
+  }
+
+  // vTaskDelete(NULL);
+}
+
+void onWiFiCredentialsReady() {
+  xTaskCreate(createConnections, "ConnectTask", 10000, NULL, 1, NULL);
+}
+
+void captureVibration(void *param) {
+  while (true) {
+    for (int i = 0; i < SAMPLES; i++) {
+      sensors_event_t a, g, temp;
+      mpu.getEvent(&a, &g, &temp);
+
+      ax[i] = a.acceleration.x;
+
+      vReal[i] = ax[i];
+      vImag[i] = 0;
+
+      vTaskDelay((1000 / SAMPLING_FREQUENCY) / portTICK_PERIOD_MS);
+    }
+
+    FFT.windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.compute(vReal, vImag, SAMPLES, FFT_FORWARD);
+    FFT.complexToMagnitude(vReal, vImag, SAMPLES);
+
+    int peakIndex = FFT.majorPeak(vReal, SAMPLES, SAMPLING_FREQUENCY);
+
+    // peakIndex * (SAMPLING_FREQUENCY / SAMPLES)
+    int peakIndexParabola = FFT.majorPeakParabola(vReal, SAMPLES, SAMPLING_FREQUENCY);
+    
+    DynamicJsonDocument doc(1024);
+
+    doc["serialNumber"] = WiFi.macAddress();
+    doc["type"] = "vibration";
+    doc["value"] = peakIndexParabola;
+
+    String output;
+    serializeJson(doc, output);
+
+    mqttClient.publish("hardware.add-metrics", output.c_str());
+
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+  }
+}
+
+void captureTemperature(void *param) {
+  while (true) {
+    if (mqttClient.connected()) {
+      DynamicJsonDocument doc(1024);
+
+      doc["serialNumber"] = WiFi.macAddress();
+      doc["type"] = "temperature";
+      doc["value"] = thermocouple.readCelsius();
+
+      String output;
+      serializeJson(doc, output);
+
+      mqttClient.publish("hardware.add-metrics", output.c_str());
+    }
+
+    vTaskDelay(15000 / portTICK_PERIOD_MS);
+  }
+}
+
+void captureEnergy(void *param) {
+  while (true) {
+    // int sensorValue = analogRead(ACS_ADS_PIN);
+
+    // float sensorVoltage = (sensorValue / 4095.0) * 3.3;
+
+    // // Calcula a corrente em Amperes
+    // float current = (sensorVoltage - 2.5) / 0.066;
+
+    // // Exemplo de resistência da carga no circuito (em Ohms)
+    // float resistance = 10.0;
+
+    // // Calcula a voltagem no circuito com base na corrente e resistência
+    // float voltageCircuit = current * resistance;
+
+    // // Exibe os valores no monitor serial
+    // Serial.print("Tensão medida pelo sensor: ");
+    // Serial.print(sensorVoltage);
+    // Serial.println(" V");
+
+    // Serial.print("Corrente no circuito: ");
+    // Serial.print(current);
+    // Serial.println(" A");
+
+    // Serial.print("Voltagem no circuito: ");
+    // Serial.print(voltageCircuit);
+    // Serial.println(" V");
+
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
+}
+
 void setup() {
   Serial.begin(115200);
 
+  pinMode(VIBRATION_PIN, INPUT);
+
+  if (!mpu.begin()) {
+    Serial.println("Falha ao inicializar o MPU6050. Verifique a conexão.");
+    while (1);
+  }
+
+  mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
+
   WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
   WiFi.onEvent(wifiEventHandler, ARDUINO_EVENT_MAX);
 
   mqttClient.setServer(MQTT_BROKER, MQTT_PORT);
 
-  bleProvisioning.set_on_credentials_ready_callback(&onWiFiCredentialsReady);
-  bleProvisioning.set_networks_scan_callback(&scanNetworks);
-  bleProvisioning.init(DEVICE_NAME, DEVICE_MODEL, WiFi.macAddress().c_str());
+  if (loadWiFiCredentials(ssid, password)) {
+    Serial.println("Found saved Wi-Fi credentials, trying to connect...");
+
+    usingBLE = false;
+
+    onWiFiCredentialsReady();
+  } else {
+    bleProvisioning.set_on_credentials_ready_callback(&onWiFiCredentialsReady);
+    bleProvisioning.set_networks_scan_callback(&scanNetworks);
+    bleProvisioning.init(DEVICE_NAME, DEVICE_MODEL, WiFi.macAddress().c_str());
+  }
+
+  xTaskCreate(captureTemperature, "CaptureTemperatureTask", 5000, NULL, 1, NULL);
+  xTaskCreate(captureVibration, "CaptureVibrationTask", 5000, NULL, 1, NULL);
+  // xTaskCreate(captureEnergy, "CaptureEnergyTask", 5000, NULL, 1, NULL);
 }
 
-void loop() {
-  if (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    return;
-  }
-
-  if (!mqttClient.connected()) {
-    connectToMQTT();
-  }
-
-  mqttClient.loop();
-
-  unsigned long now = millis();
-  if (now - lastMsg > 10000) {
-    lastMsg = now;
-    if (flag == 0) {
-      mqttClient.publish("hardware.add-metric", "000");
-      // Serial.println("000");
-    } else {
-      mqttClient.publish("hardware.add-metric", "111");
-      // Serial.println("111");
-    }
-    flag = !flag;
-  }
-}
+void loop() {}

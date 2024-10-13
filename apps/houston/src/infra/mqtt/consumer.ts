@@ -21,11 +21,12 @@ export async function start() {
 		try {
 			switch (topic as Topic) {
 				case 'hardware.add-metrics': {
-					const { atlasOrganizationId, serialNumber, type, value } = payload;
+					const { atlasOrganizationSlug, serialNumber, type, value } = payload;
 
 					await metricService.addMetrics([
 						{
-							atlasOrganizationId,
+							atlasOrganizationSlug,
+							deviceName: 'Unknown',
 							serialNumber,
 							type,
 							value,

@@ -3,7 +3,12 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from './lib/auth';
 
 const AUTH_PATHNAME = '/auth';
-const PUBLIC_PATHNAMES = ['/organizations', '/settings', '/support'];
+const PUBLIC_PATHNAMES = [
+	'/organizations',
+	'/settings',
+	'/support',
+	'/onboarding',
+];
 
 export function middleware(request: NextRequest) {
 	const { pathname, origin } = request.nextUrl;
@@ -33,12 +38,16 @@ export function middleware(request: NextRequest) {
 
 	if (
 		!pathname.startsWith(AUTH_PATHNAME) &&
-		!PUBLIC_PATHNAMES.includes(pathname) &&
+		!PUBLIC_PATHNAMES.some((publicPath) => pathname.startsWith(publicPath)) &&
 		slug
 	) {
 		response.cookies.set('organization', slug, {
 			path: '/',
 		});
+	}
+
+	if (PUBLIC_PATHNAMES.includes(pathname)) {
+		response.cookies.delete('organization');
 	}
 
 	return response;

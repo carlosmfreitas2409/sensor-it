@@ -1,13 +1,13 @@
-import { Button } from '@sensor-it/ui/components';
-import { ChevronRight, Download, Filter } from '@sensor-it/ui/icons';
+import { Button, MaxWidthWrapper } from '@sensor-it/ui/components';
+import { ChevronRight } from '@sensor-it/ui/icons';
 
 import { getOrganizationSlug } from '@/lib/auth';
 
-import { getGeneralMetrics } from '@/services/metrics/get-general-metrics';
+import { getOverview } from '@/services/metrics/get-overview';
 
-import { FailureAverageCard } from '@/components/dashboard/failure-average-card';
-import { OperationCard } from '@/components/dashboard/operation-card';
-import { StatsCard } from '@/components/dashboard/stats-card';
+import { FailureAverageCard } from './components/failure-average-card';
+import { OperationCard } from './components/operation-card';
+import { StatsCard } from './components/stats-card';
 
 export default async function Dashboard() {
 	const slug = getOrganizationSlug();
@@ -16,42 +16,31 @@ export default async function Dashboard() {
 		return null;
 	}
 
-	const metrics = await getGeneralMetrics(slug);
+	const { devices, activeDevices, failedMachines } = await getOverview(slug);
 
 	return (
-		<div className="flex flex-1 flex-col gap-6">
+		<MaxWidthWrapper className="flex flex-1 flex-col gap-6">
 			<div className="flex items-center justify-between gap-6">
 				<h1 className="font-bold text-2xl">Painel de controle</h1>
-				<div className="space-x-3">
-					<Button variant="outline">
-						<Filter className="mr-2 size-4" />
-						<span>Filtros</span>
-					</Button>
-
-					<Button>
-						<Download className="mr-2 size-4" />
-						<span>Exportar CSV</span>
-					</Button>
-				</div>
 			</div>
 
 			<div className="grid grid-cols-3 gap-5">
 				<StatsCard
 					title="Total de dispositivos"
-					value={metrics.devices.total}
-					percentage={metrics.devices.percentageOverLastMonth}
+					value={devices.total}
+					percentage={devices.percentageOverLastMonth}
 				/>
 
 				<StatsCard
 					title="Dispositivos ativos"
-					value={metrics.activeDevices.total}
-					percentage={metrics.activeDevices.percentageOverLastMonth}
+					value={activeDevices.total}
+					percentage={activeDevices.percentageOverLastMonth}
 				/>
 
 				<StatsCard
 					title="Máquinas com falha"
-					value={metrics.failedMachines.total}
-					percentage={metrics.failedMachines.percentageOverLastMonth}
+					value={failedMachines.total}
+					percentage={failedMachines.percentageOverLastMonth}
 				/>
 			</div>
 
@@ -77,6 +66,6 @@ export default async function Dashboard() {
 					</Button>
 				</div>
 			</div>
-		</div>
+		</MaxWidthWrapper>
 	);
 }

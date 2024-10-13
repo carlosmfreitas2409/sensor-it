@@ -1,5 +1,4 @@
 import type { SVGProps } from 'react';
-import type { LucideIcon } from 'lucide-react';
 
 export * from 'lucide-react';
 
@@ -8,9 +7,12 @@ export * from './success-status';
 export * from './qrcode-reader';
 
 // sensor.it
-export * from './logo';
+export * from './sensor-it-mark';
+export * from './sensor-it-wordmark';
 
 // brand logos
 export * from './google';
+export * from './openai';
+export * from './meta';
 
-export type Icon = LucideIcon | SVGProps<SVGSVGElement>;
+export type Icon = SVGProps<SVGSVGElement>;

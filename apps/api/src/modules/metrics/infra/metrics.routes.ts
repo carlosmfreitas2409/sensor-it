@@ -1,5 +1,8 @@
 import Elysia from 'elysia';
 
-import { getGeneralMetricsController } from '../use-cases/get-general-metrics/controller';
+import { getOverviewController } from '../use-cases/get-overview/controller';
+import { getAnalyticsController } from '../use-cases/get-analytics/controller';
 
-export const metricsRoutes = new Elysia().use(getGeneralMetricsController);
+export const metricsRoutes = new Elysia()
+	.use(getOverviewController)
+	.use(getAnalyticsController);

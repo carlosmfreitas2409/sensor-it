@@ -1,18 +1,18 @@
 'use client';
 
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { cn } from '@sensor-it/utils';
 
-import * as icons from '@sensor-it/ui/icons';
+import { useOrganization } from '@/hooks/use-organization';
 
 import { Badge } from '@sensor-it/ui/components';
 
 interface NavItemProps {
 	name: string;
 	path: string;
-	icon: keyof typeof icons;
+	icon: React.FC<React.SVGProps<SVGSVGElement>>;
 	isComingSoon?: boolean;
 }
 
@@ -23,12 +23,13 @@ export function NavItem({
 	isComingSoon = false,
 }: NavItemProps) {
 	const pathname = usePathname();
-	const { slug } = useParams();
+
+	const { slug } = useOrganization();
 
 	const isActive =
 		pathname === path || (pathname.startsWith(path) && path !== `/${slug}`);
 
-	const Icon = icons[icon] as icons.LucideIcon;
+	const Icon = icon;
 
 	return (
 		<Link

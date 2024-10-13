@@ -48,7 +48,7 @@ SensorIt is a SaaS platform enabling intelligent monitoring and analysis of indu
 - [Elysia](https://elysiajs.com/)
 - [Supabase](https://supabase.com/) (Postgres database, storage)
 - [Upstash](https://upstash.com/) (Redis)
-- [ClickHouse](https://clickhouse.com/) (Metrics)
+- [Tinybird](https://www.tinybird.co/) (Metrics)
 
 ## Repo Activity
 

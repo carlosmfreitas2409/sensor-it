@@ -1,4 +1,5 @@
 import { monitoringPrompt } from './monitoring';
+import { supportPrompt } from './support';
 
 type PromptType = 'support' | 'monitoring';
 
@@ -7,7 +8,7 @@ export function getPrompt(type: PromptType) {
 		case 'monitoring':
 			return monitoringPrompt;
 		case 'support':
-			return 'supportPrompt';
+			return supportPrompt;
 		default:
 			return monitoringPrompt;
 	}

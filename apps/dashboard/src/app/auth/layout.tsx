@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Logo } from '@sensor-it/ui/icons';
+import { ArrowLeft, ArrowRight, SensorItWordMark } from '@sensor-it/ui/icons';
 
 import { Button } from '@sensor-it/ui/components';
 
@@ -48,7 +48,7 @@ export default function AuthLayout({
 			<div className="flex items-center justify-center p-4 lg:max-w-3xl">
 				<div className="flex w-full max-w-md flex-col">
 					<div className="mb-16">
-						<Logo />
+						<SensorItWordMark />
 					</div>
 
 					{children}
