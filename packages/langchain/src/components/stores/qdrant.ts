@@ -4,8 +4,6 @@ import { env } from '@sensor-it/env/server';
 
 import { openAIEmbeddings } from '../../lib/open-ai-embeddings';
 
-// import { QdrantVectorStore } from './qdrant-vector-store';
-
 interface CreateQDrantVectorInstanceOptions {
 	collectionName?: string;
 }
@@ -15,6 +13,7 @@ export function createQDrantVectorInstance({
 }: CreateQDrantVectorInstanceOptions) {
 	return new QdrantVectorStore(openAIEmbeddings, {
 		url: env.QDRANT_URL,
+		apiKey: env.QDRANT_API_KEY,
 		collectionName,
 		collectionConfig: {
 			vectors: {
