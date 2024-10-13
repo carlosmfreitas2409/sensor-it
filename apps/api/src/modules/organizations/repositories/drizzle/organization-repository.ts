@@ -6,6 +6,7 @@ import {
 	members,
 	organizations,
 	type Organization,
+	type InsertOrganization,
 } from '@/infra/db';
 
 import type {
@@ -35,6 +36,30 @@ export class DrizzleOrganizationRepository implements IOrganizationRepository {
 		return organizationsWithUserRole;
 	}
 
+	async findBySlug(slug: string): Promise<Organization | null> {
+		const organization = await this.drizzle.query.organizations.findFirst({
+			where: (fields, { eq }) => eq(fields.slug, slug),
+		});
+
+		if (!organization) {
+			return null;
+		}
+
+		return organization;
+	}
+
+	async findByDomain(domain: string): Promise<Organization | null> {
+		const organization = await this.drizzle.query.organizations.findFirst({
+			where: (fields, { eq }) => eq(fields.domain, domain),
+		});
+
+		if (!organization) {
+			return null;
+		}
+
+		return organization;
+	}
+
 	async findByDomainAndAttachAllowed(
 		domain: string,
 	): Promise<Organization | null> {
@@ -51,5 +76,39 @@ export class DrizzleOrganizationRepository implements IOrganizationRepository {
 		}
 
 		return organization;
+	}
+
+	async findByStripeCustomerId(
+		stripeCustomerId: string,
+	): Promise<Organization | null> {
+		const organization = await this.drizzle.query.organizations.findFirst({
+			where: (fields, { eq }) => eq(fields.stripeCustomerId, stripeCustomerId),
+		});
+
+		if (!organization) {
+			return null;
+		}
+
+		return organization;
+	}
+
+	async create(dto: InsertOrganization): Promise<Organization> {
+		const [organization] = await this.drizzle
+			.insert(organizations)
+			.values(dto)
+			.returning();
+
+		return organization;
+	}
+
+	async updatePlan(
+		slug: string,
+		stripeCustomerId: string,
+		plan: string,
+	): Promise<void> {
+		await this.drizzle
+			.update(organizations)
+			.set({ stripeCustomerId, plan })
+			.where(eq(organizations.slug, slug));
 	}
 }

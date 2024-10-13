@@ -1,0 +1,36 @@
+NODE count_active_devices
+SQL >
+  %
+  WITH (
+    toStartOfMonth(now() - INTERVAL 1 MONTH) AS previous_month_start,
+    toStartOfMonth(now()) AS current_month_start,
+    COUNTIf(toStartOfMonth(created_at) = current_month_start) AS current_month_count,
+    COUNTIf(toStartOfMonth(created_at) = previous_month_start) AS previous_month_count
+  )
+  SELECT
+    COUNT(*) AS total, 
+    round(
+      IF(
+        previous_month_count > 0,
+        (current_month_count / previous_month_count * 0.1),
+        0
+      ), 2
+    ) AS percentageOverLastMonth
+  FROM devices_metadata_latest FINAL
+  WHERE
+    organization_id
+    = {{
+      String(
+        organizationId,
+        '3bc6d028-012e-478e-a12c-14e663bffb7f',
+        description="The ID of the organization",
+        required=True,
+      )
+    }}
+    AND deleted = 0
+
+
+NODE endpoint
+SQL >
+  SELECT total, percentageOverLastMonth FROM count_active_devices
+  

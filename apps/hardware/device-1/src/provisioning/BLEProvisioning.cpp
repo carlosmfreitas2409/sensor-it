@@ -154,6 +154,7 @@ void BLEProvisioning::set_networks_scan_callback(t_string_func callback) {
 };
 
 void BLEProvisioning::set_wifi_status(const char *status) {
+  Serial.println(status);
   this->_status_char->setValue(status);
   this->_status_char->notify();
 }

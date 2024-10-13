@@ -6,9 +6,12 @@ import {
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { users } from './users';
-import { organizations } from './organizations';
+import { type Organization, organizations } from './organizations';
 
-export type Device = InferSelectModel<typeof devices>;
+export type Device = InferSelectModel<typeof devices> & {
+	organization?: Partial<Organization>;
+};
+
 export type InsertDevice = InferInsertModel<typeof devices>;
 
 export const deviceModelEnum = pgEnum('device_model', ['TriS']);
@@ -35,6 +38,11 @@ export const devices = pgTable('devices', {
 });
 
 export const devicesRelations = relations(devices, ({ one }) => ({
+	organization: one(organizations, {
+		fields: [devices.organizationId],
+		references: [organizations.id],
+		relationName: 'device_organization',
+	}),
 	assignee: one(users, {
 		fields: [devices.assigneeId],
 		references: [users.id],

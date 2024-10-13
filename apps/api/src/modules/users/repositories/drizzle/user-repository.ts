@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm';
+
 import { db, users, type InsertUser, type User } from '@/infra/db';
 
 import type { IUserRepository } from '../interfaces/user-repository';
@@ -33,5 +35,12 @@ export class DrizzleUserRepository implements IUserRepository {
 		const [user] = await this.drizzle.insert(users).values(dto).returning();
 
 		return user;
+	}
+
+	async setOnboardingCompleted(userId: string): Promise<void> {
+		await this.drizzle
+			.update(users)
+			.set({ onboardingCompleted: true })
+			.where(eq(users.id, userId));
 	}
 }

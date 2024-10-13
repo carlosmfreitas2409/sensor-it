@@ -6,7 +6,7 @@ export function FormInput(props: InputProps) {
 	const { field } = useFormField();
 
 	return (
-		<FormControl>
+		<FormControl onChange={props.onChange}>
 			<Input {...props} {...field} />
 		</FormControl>
 	);

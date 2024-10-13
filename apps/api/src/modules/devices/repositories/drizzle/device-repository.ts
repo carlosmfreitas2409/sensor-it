@@ -1,8 +1,7 @@
 import { db, type InsertDevice, type Device, devices } from '@/infra/db';
 
-import { clickHouse } from '@/infra/lib/clickhouse';
-
 import type { IDeviceRepository } from '../interfaces/device-repository';
+import { eq } from 'drizzle-orm';
 
 export class DrizzleDeviceRepository implements IDeviceRepository {
 	public drizzle = db;
@@ -19,9 +18,28 @@ export class DrizzleDeviceRepository implements IDeviceRepository {
 		return devices;
 	}
 
+	async findById(id: string): Promise<Device | null> {
+		const device = await this.drizzle.query.devices.findFirst({
+			where: (fields, { eq }) => eq(fields.id, id),
+		});
+
+		if (!device) {
+			return null;
+		}
+
+		return device;
+	}
+
 	async findBySerialNumber(serialNumber: string): Promise<Device | null> {
 		const device = await this.drizzle.query.devices.findFirst({
 			where: (fields, { eq }) => eq(fields.serialNumber, serialNumber),
+			with: {
+				organization: {
+					columns: {
+						slug: true,
+					},
+				},
+			},
 		});
 
 		if (!device) {
@@ -34,15 +52,10 @@ export class DrizzleDeviceRepository implements IDeviceRepository {
 	async create(dto: InsertDevice): Promise<Device> {
 		const [device] = await this.drizzle.insert(devices).values(dto).returning();
 
-		await clickHouse.devicesMetadata.insert({
-			timestamp: new Date(),
-			organizationId: dto.organizationId,
-			deviceId: device.id,
-			serialNumber: dto.serialNumber,
-			createdAt: device.createdAt,
-			deleted: 0,
-		});
-
 		return device;
+	}
+
+	async delete(id: string): Promise<void> {
+		await this.drizzle.delete(devices).where(eq(devices.id, id));
 	}
 }

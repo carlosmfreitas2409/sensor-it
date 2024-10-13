@@ -4,4 +4,5 @@ export type Organization = {
 	slug: string;
 	avatarUrl: string | null;
 	devices: number;
+	plan?: string;
 };

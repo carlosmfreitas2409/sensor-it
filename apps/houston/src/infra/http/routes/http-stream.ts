@@ -48,11 +48,11 @@ export function textStream(
 
 	callback(stream).finally(() => stream.close());
 
-	return new Response(readable, {
-		headers: {
-			'content-type': 'text/plain',
-			'Transfer-Encoding': 'chunked',
-			...headers,
-		},
-	});
+	const response = new Response(readable);
+
+	for (const [key, value] of Object.entries(headers || {})) {
+		response.headers.set(key, value);
+	}
+
+	return response;
 }

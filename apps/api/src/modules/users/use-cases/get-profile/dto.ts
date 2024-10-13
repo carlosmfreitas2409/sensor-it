@@ -8,6 +8,7 @@ const successResponse = t.Object({
 		email: t.String({ format: 'email' }),
 		name: t.String(),
 		avatarUrl: t.Nullable(t.String({ format: 'uri' })),
+		onboardingCompleted: t.Boolean(),
 	}),
 });
 

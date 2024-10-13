@@ -1,4 +1,0 @@
-{
-	"extends": "@sensor-it/tsconfig/base.json",
-	"include": ["**/*.ts"]
-}

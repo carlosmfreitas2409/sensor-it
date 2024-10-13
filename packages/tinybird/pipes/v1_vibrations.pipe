@@ -1,0 +1,131 @@
+NODE month_intervals
+SQL >
+  %
+  WITH
+    toStartOfMonth(
+      toDateTime64({{ DateTime64(start, '2024-02-24 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS start,
+    toStartOfMonth(
+      toDateTime64({{ DateTime64(end, '2024-05-23 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS
+  end,
+  dateDiff('month', start, end) + 1 AS months_diff
+  SELECT
+    arrayJoin(
+      arrayMap(
+        x -> toDateTime64(start + toIntervalMonth(x), 3, {{ String(timezone, 'UTC') }}),
+        range(0, months_diff)
+      )
+    ) as interval
+
+NODE day_intervals
+SQL >
+  %
+  WITH
+    toStartOfDay(
+      toDateTime64({{ DateTime64(start, '2024-02-24 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS start,
+    toStartOfDay(
+      toDateTime64({{ DateTime64(end, '2024-05-23 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS
+  end
+  SELECT
+    arrayJoin(
+      arrayMap(
+        x -> toDateTime64(toStartOfDay(toDateTime64(x, 3), {{ String(timezone, 'UTC') }}), 3),
+        range(toUInt32(start + 86400), toUInt32(end + 86400), 86400)
+      )
+    ) as interval
+
+NODE hour_intervals
+SQL >
+  %
+  WITH
+    toStartOfHour(
+      toDateTime64({{ DateTime64(start, '2024-05-22 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS start,
+    toStartOfHour(
+      toDateTime64({{ DateTime64(end, '2024-05-23 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS
+  end
+  SELECT
+    arrayJoin(
+      arrayMap(x -> toDateTime64(x, 3), range(toUInt32(start + 3600), toUInt32(end + 3600), 3600))
+    ) as interval
+
+NODE minute_intervals
+SQL >
+  %
+  WITH
+    toStartOfMinute(
+      toDateTime64({{ DateTime64(start, '2024-05-22 00:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS start,
+    toStartOfMinute(
+      toDateTime64({{ DateTime64(end, '2024-05-22 01:00:00.000') }}, 3),
+      {{ String(timezone, 'UTC') }}
+    ) AS
+  end
+  SELECT
+    arrayJoin(
+      arrayMap(
+        x -> toDateTime64(toStartOfMinute(toDateTime64(x, 3), {{ String(timezone, 'UTC') }}), 3),
+        range(toUInt32(start + 60), toUInt32(end + 60), 60)
+      )
+    ) as interval
+
+NODE timeseries_data
+SQL >
+  %
+  SELECT
+    {% if granularity == "hour" %}
+      toStartOfHour(timestamp, {{ String(timezone, 'UTC') }})
+    {% elif granularity == "month" %}
+      toDateTime64(
+        toStartOfMonth(timestamp, {{ String(timezone, 'UTC') }}),
+        3,
+        {{ String(timezone, 'UTC') }}
+      )
+    {% else %}
+      toDateTime64(toStartOfDay(timestamp, {{ String(timezone, 'UTC') }}), 3)
+    {% end %} AS interval,
+    avg(value) AS value
+  FROM device_events
+  WHERE
+    type = 'vibration'
+    AND serial_number = {{ String(serialNumber, '10:06:1C:68:7E:DC', description="The serial number of the device", required=True) }}
+    AND timestamp >= {{ DateTime(start, '2024-04-25 00:00:00') }}
+    AND timestamp < {{ DateTime(end, '2024-05-23 00:00:00') }}
+  GROUP BY interval
+  ORDER BY interval
+
+NODE endpoint
+SQL >
+  %
+  SELECT formatDateTime(interval, '%FT%T.000%z') as timestamp, value
+  FROM
+    {% if granularity == "minute" %} minute_intervals
+    {% elif granularity == "hour" %} hour_intervals
+    {% elif granularity == "month" %} month_intervals
+    {% else %} day_intervals
+    {% end %}
+  LEFT JOIN timeseries_data USING interval
+
+
+# %
+# SELECT
+#   timestamp,
+#   value
+# FROM device_events
+# WHERE
+#   type = 'vibration'
+#   AND serial_number = {{ String(serialNumber, '10:06:1C:68:7E:DC', description="The serial number of the device", required=True)  }}
+#   {% if defined(start) %} AND timestamp >= {{ DateTime(start) }} {% end %}
+#   {% if defined(end) %} AND timestamp <= {{ DateTime(end) }} {% end %}
+# ORDER BY timestamp ASC

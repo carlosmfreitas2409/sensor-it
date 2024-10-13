@@ -1,0 +1,9 @@
+SCHEMA >
+  `timestamp` DateTime64(3) `json:$.timestamp`,
+  `serial_number` LowCardinality(String) `json:$.serial_number`,
+  `type` LowCardinality(String) `json:$.type`,
+  `value` Decimal(10, 2) `json:$.value`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(timestamp)"
+ENGINE_SORTING_KEY "timestamp, serial_number"

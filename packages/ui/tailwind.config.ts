@@ -45,6 +45,10 @@ const config: Omit<Config, 'content'> = {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
 				},
+				chat: {
+					DEFAULT: 'hsl(var(--chat))',
+					foreground: 'hsl(var(--chat-foreground))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -60,14 +64,24 @@ const config: Omit<Config, 'content'> = {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' },
 				},
+				'pulse-scale': {
+					'0%': { transform: 'scale(.8)', opacity: 0 },
+					'50%': { opacity: 1 },
+					'100%': { transform: 'scale(2)', opacity: 0 },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-scale': 'pulse-scale 6s ease-out',
 			},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [
+		require('tailwindcss-animate'),
+		require('@tailwindcss/typography'),
+		require('tailwind-scrollbar-hide'),
+	],
 };
 
 export default config;

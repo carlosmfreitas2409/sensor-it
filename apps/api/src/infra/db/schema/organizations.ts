@@ -13,11 +13,13 @@ export const organizations = pgTable('organizations', {
 		.references(() => users.id, { onDelete: 'cascade' }),
 	name: text('name').notNull(),
 	slug: text('slug').notNull().unique(),
-	domain: text('domain').notNull().unique(),
+	domain: text('domain').unique(),
 	shouldAttachUsersByDomain: boolean('should_attach_users_by_domain')
 		.notNull()
 		.default(false),
 	avatarUrl: text('avatar_url'),
+	stripeCustomerId: text('stripe_customer_id'),
+	plan: text('plan'),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at')
 		.notNull()

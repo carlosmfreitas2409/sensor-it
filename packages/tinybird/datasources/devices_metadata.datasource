@@ -1,0 +1,11 @@
+SCHEMA >
+  `timestamp` DateTime `json:$.timestamp` DEFAULT now(),
+  `device_id` String `json:$.device_id`,
+  `serial_number` String `json:$.serial_number`,
+  `organization_id` String `json:$.organization_id`,
+  `created_at` DateTime64(3) `json:$.created_at`,
+  `deleted` UInt8 `json:$.deleted`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(timestamp)"
+ENGINE_SORTING_KEY "timestamp, device_id, organization_id"

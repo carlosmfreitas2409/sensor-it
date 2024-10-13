@@ -1,11 +1,13 @@
-import type { QdrantVectorStore } from '@langchain/qdrant';
-import { Document } from '@langchain/core/documents';
+import { Document } from 'langchain/document';
+import type { QdrantVectorStore } from 'langchain/vectorstores/qdrant';
 
 import { createQDrantVectorInstance } from '../components/stores/qdrant';
+
 import { splitter } from '../lib/splitter';
 
 interface Metric {
-	atlasOrganizationId: string;
+	atlasOrganizationSlug: string;
+	deviceName: string;
 	serialNumber: string;
 	type: string;
 	value: number;
@@ -27,7 +29,8 @@ export class MetricService {
 				pageContent: metric.value.toString(),
 				metadata: {
 					timestamp: new Date(),
-					atlasOrganizationId: metric.atlasOrganizationId,
+					atlasOrganizationSlug: metric.atlasOrganizationSlug,
+					deviceName: metric.deviceName,
 					serialNumber: metric.serialNumber,
 					type: metric.type,
 				},
