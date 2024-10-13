@@ -11,11 +11,11 @@ import {
 	HumanMessage,
 } from '@sensor-it/langchain';
 
-import { chats, db, messages } from '@/infra/db';
+import { textStream } from '@/http/core/http-stream';
+
+import { chats, db, messages } from '@/db';
 
 import { auth } from '../auth';
-
-import { textStream } from './http-stream';
 
 interface ChatMessage {
 	role: 'user' | 'assistant';

@@ -1,10 +1,7 @@
 {
 	"name": "sensor-it",
 	"private": true,
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
+	"workspaces": ["apps/*", "packages/*"],
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
@@ -12,6 +9,7 @@
 		"format": "turbo format",
 		"ui:add": "turbo --filter=@sensor-it/ui ui:add --",
 		"api": "turbo --filter=@sensor-it/api",
+		"houston": "turbo --filter=@sensor-it/houston",
 		"dashboard": "turbo --filter=@sensor-it/dashboard",
 		"www": "turbo --filter=@sensor-it/www"
 	},
