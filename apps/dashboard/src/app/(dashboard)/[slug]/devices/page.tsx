@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 import { getOrganizationSlug } from '@/lib/auth';
 
 import { listDevices } from '@/services/devices/list-devices';
@@ -9,12 +7,18 @@ import { LayoutGrid, LayoutList, Plus } from '@sensor-it/ui/icons';
 import {
 	Button,
 	DataTable,
+	Dialog,
+	DialogContent,
+	DialogTrigger,
 	MaxWidthWrapper,
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 } from '@sensor-it/ui/components';
+
+import { DeviceProvider } from './components/create-device/device-provider';
+import { CreateDeviceForm } from './components/create-device/create-device-form';
 
 import { DeviceCard } from './components/device-card';
 import { EmptyState } from './components/empty-state';
@@ -45,12 +49,19 @@ export default async function Devices() {
 							</TabsTrigger>
 						</TabsList>
 
-						<Button size="sm" asChild>
-							<Link href={`/${slug}/devices/create`}>
-								<Plus className="mr-2 size-4" />
-								<span>Novo dispositivo</span>
-							</Link>
-						</Button>
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button size="sm">
+									<Plus className="mr-2 size-4" />
+									<span>Novo dispositivo</span>
+								</Button>
+							</DialogTrigger>
+							<DialogContent>
+								<DeviceProvider>
+									<CreateDeviceForm />
+								</DeviceProvider>
+							</DialogContent>
+						</Dialog>
 					</div>
 				</div>
 

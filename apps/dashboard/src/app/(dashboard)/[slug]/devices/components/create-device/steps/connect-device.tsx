@@ -13,7 +13,7 @@ import {
 
 import { useDevice } from '../device-provider';
 
-import { type CreateDeviceFormData, Step } from '../../schema';
+import { type CreateDeviceFormData, Step } from '../schema';
 
 interface QrCodeData {
 	name: string;

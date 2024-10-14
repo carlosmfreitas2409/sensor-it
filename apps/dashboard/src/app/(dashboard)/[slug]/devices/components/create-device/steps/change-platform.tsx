@@ -9,7 +9,7 @@ import {
 	DialogTitle,
 } from '@sensor-it/ui/components';
 
-import { type CreateDeviceFormData, Step } from '../../schema';
+import { type CreateDeviceFormData, Step } from '../schema';
 
 export type Platform = 'desktop' | 'mobile';
 

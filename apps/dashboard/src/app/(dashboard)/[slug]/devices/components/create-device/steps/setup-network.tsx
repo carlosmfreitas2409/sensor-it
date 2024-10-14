@@ -15,7 +15,7 @@ import { useDevice } from '../device-provider';
 import { NetworksSkeleton } from '../networks-skeleton';
 import { NetworkItem } from '../network-item';
 
-import { Step, type CreateDeviceFormData } from '../../schema';
+import { Step, type CreateDeviceFormData } from '../schema';
 
 export function SetupNetworkStep() {
 	const [isConnecting, setIsConnecting] = useState(false);

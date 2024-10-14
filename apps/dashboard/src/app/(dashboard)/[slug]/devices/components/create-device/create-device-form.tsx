@@ -13,16 +13,16 @@ import { useOrganization } from '@/hooks/use-organization';
 
 import { Form } from '@sensor-it/ui/components';
 
-import { useDevice } from './components/device-provider';
+import { useDevice } from './device-provider';
 
-import { ChangePlatformStep } from './components/steps/change-platform';
-import { SetupNetworkStep } from './components/steps/setup-network';
-import { ConnectDeviceStep } from './components/steps/connect-device';
-import { SetupDeviceStep } from './components/steps/setup-device';
+import { ChangePlatformStep } from './steps/change-platform';
+import { SetupNetworkStep } from './steps/setup-network';
+import { ConnectDeviceStep } from './steps/connect-device';
+import { SetupDeviceStep } from './steps/setup-device';
 
 import { type CreateDeviceFormData, createDeviceSchema, Step } from './schema';
 
-import { revalidateDevices } from './actions';
+import { revalidateDevices } from '../../actions';
 
 export function CreateDeviceForm() {
 	const router = useRouter();
