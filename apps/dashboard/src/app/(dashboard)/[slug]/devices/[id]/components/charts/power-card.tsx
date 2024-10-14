@@ -31,10 +31,10 @@ const chartConfig = {
 		label: 'Potência Ativa (kW)',
 		color: 'hsl(145, 63%, 49%)',
 	},
-	apparent: {
-		label: 'Potência Aparente (kVA)',
-		color: 'hsl(48, 100%, 50%)',
-	},
+	// apparent: {
+	// 	label: 'Potência Aparente (kVA)',
+	// 	color: 'hsl(48, 100%, 50%)',
+	// },
 } satisfies ChartConfig;
 
 export function PowerCard() {
@@ -110,7 +110,7 @@ export function PowerCard() {
 						</div>
 					</div>
 
-					<div className="flex flex-col">
+					{/* <div className="flex flex-col">
 						<div className="mb-1 flex items-center gap-2">
 							<div className="size-2 rounded-full bg-yellow-500" />
 							<span className="whitespace-nowrap font-medium text-muted-foreground text-sm">
@@ -124,7 +124,7 @@ export function PowerCard() {
 							</span>
 							<span className="ml-1">kVA</span>
 						</div>
-					</div>
+					</div> */}
 				</div>
 
 				<ChartContainer config={chartConfig} className="aspect-auto w-full">
@@ -205,13 +205,13 @@ export function PowerCard() {
 							stroke="var(--color-real)"
 						/>
 
-						<Area
+						{/* <Area
 							dataKey="apparent"
 							type="linear"
 							fill="url(#fillApparent)"
 							fillOpacity={0.4}
 							stroke={'var(--color-apparent)'}
-						/>
+						/> */}
 					</AreaChart>
 				</ChartContainer>
 			</CardContent>
