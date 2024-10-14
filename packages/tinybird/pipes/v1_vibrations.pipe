@@ -84,7 +84,9 @@ NODE timeseries_data
 SQL >
   %
   SELECT
-    {% if granularity == "hour" %}
+    {% if granularity == "minute" %}
+      toStartOfMinute(timestamp, {{ String(timezone, 'UTC') }})
+    {% elif granularity == "hour" %}
       toStartOfHour(timestamp, {{ String(timezone, 'UTC') }})
     {% elif granularity == "month" %}
       toDateTime64(
