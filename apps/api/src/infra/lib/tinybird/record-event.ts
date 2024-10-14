@@ -5,7 +5,7 @@ import { tb } from './client';
 const deviceEventsSchema = z.object({
 	timestamp: z.string(),
 	serial_number: z.string(),
-	type: z.enum(['temperature', 'current', 'vibration']),
+	type: z.enum(['temperature', 'current', 'real_power', 'vibration']),
 	value: z.number(),
 });
 

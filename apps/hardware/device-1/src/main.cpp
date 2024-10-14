@@ -238,13 +238,34 @@ void captureCurrent(void *param) {
     if (mqttClient.connected()) {
       double Irms = emon.calcIrms(1480);
 
+      DynamicJsonDocument doc(1024);
+
+      doc["serialNumber"] = WiFi.macAddress();
+      doc["type"] = "current";
+      doc["value"] = Irms;
+
+      String output;
+      serializeJson(doc, output);
+
+      mqttClient.publish("hardware.add-metrics", output.c_str());
+    }
+
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
+}
+
+void capturePower(void *param) {
+  while (true) {
+    if (mqttClient.connected()) {
+      double Irms = emon.calcIrms(1480);
+
       int potencia = Irms * 127;
 
       DynamicJsonDocument doc(1024);
 
       doc["serialNumber"] = WiFi.macAddress();
-      doc["type"] = "current";
-      doc["value"] = thermocouple.readCelsius();
+      doc["type"] = "real_power";
+      doc["value"] = potencia;
 
       String output;
       serializeJson(doc, output);
@@ -290,6 +311,7 @@ void setup() {
   xTaskCreate(captureTemperature, "CaptureTemperatureTask", 5000, NULL, 1, NULL);
   xTaskCreate(captureVibration, "CaptureVibrationTask", 5000, NULL, 1, NULL);
   xTaskCreate(captureCurrent, "CaptureCurrentTask", 5000, NULL, 1, NULL);
+  xTaskCreate(capturePower, "CapturePowerTask", 5000, NULL, 1, NULL);
 }
 
 void loop() {}

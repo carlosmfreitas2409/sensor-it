@@ -86,22 +86,6 @@ export class GetAnalyticsUseCase implements IGetAnalyticsUseCase {
 					},
 				};
 			}
-			case 'past-energy':
-				return {
-					perMinute: 0.66,
-					perHour: 20.82,
-					perDay: 64.97,
-					values: [
-						{
-							timestamp: new Date(),
-							value: 0.66,
-						},
-						{
-							timestamp: new Date(),
-							value: 0.66,
-						},
-					],
-				};
 			case 'last_temperature': {
 				const response = await buildAnalytics(event as Event)(filter);
 				const data = response.data as EventSchema<'last_temperature'>[];
