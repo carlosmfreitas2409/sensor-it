@@ -1,10 +1,9 @@
 import type { Plan } from '@sensor-it/utils/constants';
 
-import { CheckCircle2 } from '@sensor-it/ui/icons';
-
 import { Badge } from '@sensor-it/ui/components';
 
 import { UpgradePlanButton } from '@/components/organizations/upgrade-plan-button';
+import { PlanFeatures } from '@/components/organizations/plan-features';
 
 interface PlanCardProps {
 	name: string;
@@ -33,23 +32,7 @@ export function PlanCard({ name, plan, period }: PlanCardProps) {
 				</span>
 			</p>
 
-			<div className="mt-4 flex flex-col gap-2">
-				{plan.name.startsWith('Business') && (
-					<span className="text-muted-foreground text-sm">
-						Tudo no Pro, mais:
-					</span>
-				)}
-
-				{plan.features.map((feature, index) => (
-					<div
-						key={index}
-						className="flex items-center space-x-2 text-muted-foreground text-sm"
-					>
-						<CheckCircle2 className="size-6 fill-green-500 text-white" />
-						<span>{feature}</span>
-					</div>
-				))}
-			</div>
+			<PlanFeatures plan={plan.key} className="mt-4" />
 
 			<div className="mt-10 flex grow flex-col justify-end">
 				<UpgradePlanButton plan={plan} period={period}>

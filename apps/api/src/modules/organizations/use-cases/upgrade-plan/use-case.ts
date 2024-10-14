@@ -24,7 +24,6 @@ export class UpgradePlanUseCase implements IUpgradePlanUseCase {
 		organizationSlug,
 		userId,
 		planKey,
-		period,
 		cancelPath,
 	}: UpgradePlanInput): Promise<UpgradePlanOutput> {
 		const [user, organization] = await Promise.all([
@@ -83,7 +82,7 @@ export class UpgradePlanUseCase implements IUpgradePlanUseCase {
 		const stripeSession = await stripe.checkout.sessions.create({
 			locale: 'pt-BR',
 			customer_email: user.email,
-			success_url: `${env.APP_DOMAIN}/${organizationSlug}?upgraded=true&plan=${planKey}&period=${period}`,
+			success_url: `${env.APP_DOMAIN}/${organizationSlug}?upgraded=true&plan=${planKey.split('_')[0]}`,
 			cancel_url: `${env.APP_DOMAIN}${cancelPath || ''}`,
 			billing_address_collection: 'required',
 			line_items: [{ price: priceId, quantity: 1 }],

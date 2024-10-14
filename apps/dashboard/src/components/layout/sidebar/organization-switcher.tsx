@@ -24,12 +24,12 @@ import {
 
 import { AvatarWithFallback } from '@/components/avatar-fallback';
 
-import { useModal } from '@/components/modal-provider';
+import { useDialog } from '@/components/dialogs/dialog-provider';
 
 export function OrganizationSwitcher() {
 	const currentOrganization = useOrganization();
 
-	const { setShowCreateOrganizationDialog } = useModal();
+	const { setShowCreateOrganizationDialog } = useDialog();
 
 	// const organizations = await listOrganizations();
 

@@ -4,7 +4,7 @@ import { SensorItMark } from '@sensor-it/ui/icons';
 
 import { Dialog, DialogContent } from '@sensor-it/ui/components';
 
-import { CreateOrganizationForm } from './create-organization-form';
+import { CreateOrganizationForm } from '../organizations/create-organization-form';
 
 interface CreateOrganizationDialogProps {
 	open?: boolean;
@@ -38,7 +38,7 @@ export function useCreateOrganizationDialog() {
 	const [showCreateOrganizationDialog, setShowCreateOrganizationDialog] =
 		useState(false);
 
-	const AddOrganizationDialog = useCallback(() => {
+	const CreateOrganizationDialogCallback = useCallback(() => {
 		return (
 			<CreateOrganizationDialog
 				open={showCreateOrganizationDialog}
@@ -48,7 +48,10 @@ export function useCreateOrganizationDialog() {
 	}, [showCreateOrganizationDialog]);
 
 	return useMemo(
-		() => ({ setShowCreateOrganizationDialog, AddOrganizationDialog }),
-		[AddOrganizationDialog],
+		() => ({
+			setShowCreateOrganizationDialog,
+			CreateOrganizationDialog: CreateOrganizationDialogCallback,
+		}),
+		[CreateOrganizationDialogCallback],
 	);
 }

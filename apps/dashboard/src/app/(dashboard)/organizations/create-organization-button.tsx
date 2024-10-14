@@ -1,11 +1,11 @@
 'use client';
 
-import { useModal } from '@/components/modal-provider';
+import { useDialog } from '@/components/dialogs/dialog-provider';
 
 import { Button } from '@sensor-it/ui/components';
 
 export function CreateOrganizationButton() {
-	const { setShowCreateOrganizationDialog } = useModal();
+	const { setShowCreateOrganizationDialog } = useDialog();
 
 	return (
 		<Button
