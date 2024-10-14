@@ -43,13 +43,15 @@ export function Header() {
 				/>
 
 				<div className="flex items-center gap-4">
-					<Button
-						variant="link"
-						className="bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text p-0 text-sm text-transparent"
-						asChild
-					>
-						<Link href={`/${slug}/upgrade`}>Atualizar plano</Link>
-					</Button>
+					{slug && (
+						<Button
+							variant="link"
+							className="bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text p-0 text-sm text-transparent"
+							asChild
+						>
+							<Link href={`/${slug}/upgrade`}>Atualizar plano</Link>
+						</Button>
+					)}
 
 					<Button variant="ghost" size="icon">
 						<Bell className="size-5 text-muted-foreground" />
