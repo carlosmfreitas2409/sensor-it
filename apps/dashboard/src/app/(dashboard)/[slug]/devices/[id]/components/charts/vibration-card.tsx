@@ -37,11 +37,11 @@ export function VibrationCard() {
 	const { start, end, interval } = useAnalytics();
 
 	if (isLoading) {
-		return <SkeletonCard className="col-span-4" />;
+		return <SkeletonCard className="col-span-2" />;
 	}
 
 	return (
-		<Card className="col-span-4 flex flex-1 flex-col rounded-2xl">
+		<Card className="col-span-2 flex flex-1 flex-col rounded-2xl">
 			<CardHeader className="p-4">
 				<CardTitle>Vibração (Hertz)</CardTitle>
 			</CardHeader>

@@ -10,7 +10,6 @@ import { Download } from '@sensor-it/ui/icons';
 import { Button, MaxWidthWrapper } from '@sensor-it/ui/components';
 
 import { PowerCard } from './components/charts/power-card';
-import { PastEnergyCard } from './components/charts/past-energy-card';
 import { ElectricCurrentCard } from './components/charts/electric-current-card';
 import { PowerFactorCard } from './components/charts/power-factor-card';
 import { TemperatureCard } from './components/charts/temperature-card';
@@ -99,7 +98,7 @@ export default function DevicePage({ params }: DevicePageProps) {
 				<div className="flex-1">
 					<MaxWidthWrapper className="grid grid-cols-4 gap-4">
 						<PowerCard />
-						<PastEnergyCard />
+						{/* <PastEnergyCard /> */}
 						<ElectricCurrentCard />
 						<PowerFactorCard />
 						<TemperatureCard />
