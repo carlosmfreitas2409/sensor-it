@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo, useState } from 'react';
 
 import { PLANS, PRO_PLAN } from '@sensor-it/utils/constants';

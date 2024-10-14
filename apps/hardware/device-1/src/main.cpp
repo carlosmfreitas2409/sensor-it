@@ -5,6 +5,7 @@
 #include <PubSubClient.h>
 #include <Preferences.h>
 
+#include <EmonLib.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
@@ -20,6 +21,7 @@
 #define THERMO_CS_PIN 2
 #define THERMO_CLK_PIN 18
 #define ACS_ADS_PIN 35
+#define SCT_PIN 34
 
 #define SAMPLES 256
 #define SAMPLING_FREQUENCY 1000
@@ -41,6 +43,7 @@ PubSubClient mqttClient(espClient);
 MAX6675 thermocouple(THERMO_CLK_PIN, THERMO_CS_PIN, THERMO_DO_PIN);
 Adafruit_MPU6050 mpu;
 ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLING_FREQUENCY);
+EnergyMonitor emon;
 
 void wifiEventHandler(arduino_event_t *event) {
   switch (event->event_id) {
@@ -171,38 +174,42 @@ void onWiFiCredentialsReady() {
 
 void captureVibration(void *param) {
   while (true) {
-    for (int i = 0; i < SAMPLES; i++) {
-      sensors_event_t a, g, temp;
-      mpu.getEvent(&a, &g, &temp);
+    if (mqttClient.connected()) {
+      for (int i = 0; i < SAMPLES; i++) {
+        sensors_event_t a, g, temp;
+        mpu.getEvent(&a, &g, &temp);
 
-      ax[i] = a.acceleration.x;
+        ax[i] = a.acceleration.x;
 
-      vReal[i] = ax[i];
-      vImag[i] = 0;
+        vReal[i] = ax[i];
+        vImag[i] = 0;
 
-      vTaskDelay((1000 / SAMPLING_FREQUENCY) / portTICK_PERIOD_MS);
+        vTaskDelay((1000 / SAMPLING_FREQUENCY) / portTICK_PERIOD_MS);
+      }
+
+      FFT.windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+      FFT.compute(vReal, vImag, SAMPLES, FFT_FORWARD);
+      FFT.complexToMagnitude(vReal, vImag, SAMPLES);
+
+      int peakIndex = FFT.majorPeak(vReal, SAMPLES, SAMPLING_FREQUENCY);
+
+      // peakIndex * (SAMPLING_FREQUENCY / SAMPLES)
+      int peakIndexParabola = FFT.majorPeakParabola(vReal, SAMPLES, SAMPLING_FREQUENCY);
+      
+      DynamicJsonDocument doc(1024);
+
+      doc["serialNumber"] = WiFi.macAddress();
+      doc["type"] = "vibration";
+      doc["value"] = peakIndexParabola;
+
+      String output;
+      serializeJson(doc, output);
+
+      Serial.println(output);
+
+      mqttClient.publish("hardware.add-metrics", output.c_str());
     }
-
-    FFT.windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
-    FFT.compute(vReal, vImag, SAMPLES, FFT_FORWARD);
-    FFT.complexToMagnitude(vReal, vImag, SAMPLES);
-
-    int peakIndex = FFT.majorPeak(vReal, SAMPLES, SAMPLING_FREQUENCY);
-
-    // peakIndex * (SAMPLING_FREQUENCY / SAMPLES)
-    int peakIndexParabola = FFT.majorPeakParabola(vReal, SAMPLES, SAMPLING_FREQUENCY);
     
-    DynamicJsonDocument doc(1024);
-
-    doc["serialNumber"] = WiFi.macAddress();
-    doc["type"] = "vibration";
-    doc["value"] = peakIndexParabola;
-
-    String output;
-    serializeJson(doc, output);
-
-    mqttClient.publish("hardware.add-metrics", output.c_str());
-
     vTaskDelay(3000 / portTICK_PERIOD_MS);
   }
 }
@@ -226,33 +233,24 @@ void captureTemperature(void *param) {
   }
 }
 
-void captureEnergy(void *param) {
+void captureCurrent(void *param) {
   while (true) {
-    // int sensorValue = analogRead(ACS_ADS_PIN);
+    if (mqttClient.connected()) {
+      double Irms = emon.calcIrms(1480);
 
-    // float sensorVoltage = (sensorValue / 4095.0) * 3.3;
+      int potencia = Irms * 127;
 
-    // // Calcula a corrente em Amperes
-    // float current = (sensorVoltage - 2.5) / 0.066;
+      DynamicJsonDocument doc(1024);
 
-    // // Exemplo de resistência da carga no circuito (em Ohms)
-    // float resistance = 10.0;
+      doc["serialNumber"] = WiFi.macAddress();
+      doc["type"] = "current";
+      doc["value"] = thermocouple.readCelsius();
 
-    // // Calcula a voltagem no circuito com base na corrente e resistência
-    // float voltageCircuit = current * resistance;
+      String output;
+      serializeJson(doc, output);
 
-    // // Exibe os valores no monitor serial
-    // Serial.print("Tensão medida pelo sensor: ");
-    // Serial.print(sensorVoltage);
-    // Serial.println(" V");
-
-    // Serial.print("Corrente no circuito: ");
-    // Serial.print(current);
-    // Serial.println(" A");
-
-    // Serial.print("Voltagem no circuito: ");
-    // Serial.print(voltageCircuit);
-    // Serial.println(" V");
+      mqttClient.publish("hardware.add-metrics", output.c_str());
+    }
 
     vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
@@ -262,6 +260,8 @@ void setup() {
   Serial.begin(115200);
 
   pinMode(VIBRATION_PIN, INPUT);
+
+  emon.current(SCT_PIN, 111.1);
 
   if (!mpu.begin()) {
     Serial.println("Falha ao inicializar o MPU6050. Verifique a conexão.");
@@ -289,7 +289,7 @@ void setup() {
 
   xTaskCreate(captureTemperature, "CaptureTemperatureTask", 5000, NULL, 1, NULL);
   xTaskCreate(captureVibration, "CaptureVibrationTask", 5000, NULL, 1, NULL);
-  // xTaskCreate(captureEnergy, "CaptureEnergyTask", 5000, NULL, 1, NULL);
+  xTaskCreate(captureCurrent, "CaptureCurrentTask", 5000, NULL, 1, NULL);
 }
 
 void loop() {}

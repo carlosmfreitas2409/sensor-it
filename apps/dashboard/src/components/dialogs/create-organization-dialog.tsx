@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo, useState } from 'react';
 
 import { SensorItMark } from '@sensor-it/ui/icons';
