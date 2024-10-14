@@ -282,14 +282,14 @@ void setup() {
 
   pinMode(VIBRATION_PIN, INPUT);
 
-  emon.current(SCT_PIN, 111.1);
-
   if (!mpu.begin()) {
     Serial.println("Falha ao inicializar o MPU6050. Verifique a conexão.");
     while (1);
   }
 
   mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
+  
+  emon.current(SCT_PIN, 111.1);
 
   WiFi.mode(WIFI_STA);
   WiFi.onEvent(wifiEventHandler, ARDUINO_EVENT_MAX);

@@ -13,6 +13,6 @@ import { env } from '@sensor-it/env/server';
 
 export const openAiGenerator = new ChatOpenAI({
 	openAIApiKey: env.OPENAI_API_KEY,
-	modelName: 'gpt-3.5-turbo',
+	modelName: 'gpt-4o',
 	temperature: 0,
 });
