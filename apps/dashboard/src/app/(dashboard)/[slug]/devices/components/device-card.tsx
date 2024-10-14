@@ -62,7 +62,7 @@ export function DeviceCard({ device }: DeviceCardProps) {
 								</Button>
 							</TooltipTrigger>
 							<TooltipContent>
-								<span>Ver histórico</span>
+								<span>Ver métricas</span>
 							</TooltipContent>
 						</Tooltip>
 

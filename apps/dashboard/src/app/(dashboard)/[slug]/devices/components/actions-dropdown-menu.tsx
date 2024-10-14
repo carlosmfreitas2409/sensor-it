@@ -2,6 +2,7 @@ import { MoreHorizontal, PowerOff, Trash } from '@sensor-it/ui/icons';
 
 import {
 	AlertDialog,
+	AlertDialogContent,
 	AlertDialogTrigger,
 	Button,
 	DropdownMenu,
@@ -19,7 +20,7 @@ interface ActionsDropdownMenuProps {
 export function ActionsDropdownMenu({ deviceId }: ActionsDropdownMenuProps) {
 	return (
 		<AlertDialog>
-			<DropdownMenu>
+			<DropdownMenu modal={false}>
 				<DropdownMenuTrigger asChild>
 					<Button variant="ghost" size="icon" className="size-8">
 						<span className="sr-only">Abrir menu</span>
@@ -42,7 +43,9 @@ export function ActionsDropdownMenu({ deviceId }: ActionsDropdownMenuProps) {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<DeleteAlertDialog deviceId={deviceId} />
+			<AlertDialogContent>
+				<DeleteAlertDialog deviceId={deviceId} />
+			</AlertDialogContent>
 		</AlertDialog>
 	);
 }

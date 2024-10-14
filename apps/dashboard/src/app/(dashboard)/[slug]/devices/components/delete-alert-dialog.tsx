@@ -9,7 +9,6 @@ import type { ListDevicesResponse } from '@/services/devices/list-devices';
 import { useOrganizationSlug } from '@/hooks/use-organization-slug';
 
 import {
-	AlertDialogContent,
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogDescription,
@@ -53,7 +52,7 @@ export function DeleteAlertDialog({ deviceId }: DeleteAlertDialogProps) {
 	const slug = useOrganizationSlug();
 
 	return (
-		<AlertDialogContent>
+		<>
 			<AlertDialogHeader>
 				<AlertDialogTitle>Deletar dispositivo</AlertDialogTitle>
 				<AlertDialogDescription>
@@ -77,6 +76,6 @@ export function DeleteAlertDialog({ deviceId }: DeleteAlertDialogProps) {
 					</AlertDialogAction>
 				</Button>
 			</AlertDialogFooter>
-		</AlertDialogContent>
+		</>
 	);
 }
