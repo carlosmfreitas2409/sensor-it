@@ -36,8 +36,6 @@ export function middleware(request: NextRequest) {
 
 	const [, slug] = pathname.split('/');
 
-	console.log(slug, pathname);
-
 	if (
 		!pathname.startsWith(AUTH_PATHNAME) &&
 		!PUBLIC_PATHNAMES.some((publicPath) => pathname.startsWith(publicPath)) &&

@@ -19,7 +19,6 @@ export function useAnalyticsFilterOption<E extends AnalyticsEvent>(event: E) {
 		};
 	}
 
-	console.log(filters);
 	const { data, isLoading } = useQuery({
 		queryKey: ['analytics-filter-option', event, filters],
 		queryFn: () =>

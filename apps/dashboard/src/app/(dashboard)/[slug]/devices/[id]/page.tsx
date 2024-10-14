@@ -29,7 +29,7 @@ interface DevicePageProps {
 	};
 }
 
-export default async function DevicePage({ params }: DevicePageProps) {
+export default function DevicePage({ params }: DevicePageProps) {
 	const { data: device, isLoading } = useQuery({
 		queryKey: ['device', params.id],
 		queryFn: () => getDevice(params.slug, params.id),
