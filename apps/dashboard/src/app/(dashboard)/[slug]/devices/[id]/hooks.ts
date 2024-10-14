@@ -29,7 +29,7 @@ export function useAnalyticsFilterOption<E extends AnalyticsEvent>(event: E) {
 					...filters,
 				},
 			}),
-		// refetchInterval: 15000,
+		refetchInterval: 15000,
 	});
 
 	return {
